@@ -12,6 +12,7 @@
 	<description>Demo project for Spring Boot</description>
 
 	<modules>
+		<module>config-server</module>
 		<module>discovery-server</module>
 		<module>simple-service</module>
 		<module>simple-client</module>
