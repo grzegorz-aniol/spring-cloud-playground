@@ -14,6 +14,7 @@
 	<modules>
 		<module>config-server</module>
 		<module>discovery-server</module>
+		<module>gateway-service</module>
 		<module>simple-service</module>
 		<module>simple-client</module>
 	</modules>
