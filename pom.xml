@@ -4,17 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.gangel.eureka</groupId>
-	<artifactId>eureka-test-parent</artifactId>
+	<artifactId>spring-cloud-playground-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>eureka-test</name>
-	<description>Demo project for Spring Boot</description>
+	<name>spring-cloud-playground</name>
+	<description>Testing Spring Cloud services</description>
 
 	<modules>
 		<module>config-server</module>
 		<module>discovery-server</module>
 		<module>gateway-service</module>
+		<module>hystrix</module>
 		<module>simple-service</module>
 		<module>simple-client</module>
 	</modules>
