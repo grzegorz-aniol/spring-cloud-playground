@@ -1,0 +1,18 @@
+version: '3'
+services:
+  elk:
+    image: sebp/elk:551
+    ports:
+    - "5601:5601"
+    - "9200:9200"
+    - "5044:5044"
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:5.6.0
+    depends_on: 
+     - elk
+    volumes:
+     - "./heartbeat.yml:/usr/share/heartbeat/heartbeat.yml:rw"
+    environment:
+      HOSTNAME: "127.0.0.1"
+      LOGSTASH_HOST: "127.0.0.1"
+      LOGSTASH_PORT: "5044"
