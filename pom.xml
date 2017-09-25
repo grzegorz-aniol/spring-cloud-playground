@@ -18,6 +18,7 @@
 		<module>hystrix</module>
 		<module>simple-service</module>
 		<module>simple-client</module>
+		<module>data-service</module>
 	</modules>
 	
 	<parent>

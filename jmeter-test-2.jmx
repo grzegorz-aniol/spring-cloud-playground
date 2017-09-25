@@ -26,13 +26,13 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <RandomOrderController guiclass="RandomOrderControllerGui" testclass="RandomOrderController" testname="Test simple calls (performance)" enabled="false"/>
+        <RandomOrderController guiclass="RandomOrderControllerGui" testclass="RandomOrderController" testname="Test simple calls (performance)" enabled="true"/>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SimplService direct call" enabled="false">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SimplService direct call" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">localhost</stringProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.port">8001</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -51,7 +51,7 @@
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">localhost</stringProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.port">8080</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -66,11 +66,11 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Client (callwithribbon)" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Client (callwithribbon)" enabled="false">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">localhost</stringProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.port">9001</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -85,11 +85,11 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Client (calldirect)" enabled="true">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Simple Client (calldirect)" enabled="false">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
               <collectionProp name="Arguments.arguments"/>
             </elementProp>
-            <stringProp name="HTTPSampler.domain">localhost</stringProp>
+            <stringProp name="HTTPSampler.domain"></stringProp>
             <stringProp name="HTTPSampler.port">9001</stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -105,7 +105,7 @@
           </HTTPSamplerProxy>
           <hashTree/>
         </hashTree>
-        <RandomOrderController guiclass="RandomOrderControllerGui" testclass="RandomOrderController" testname="Test call via API Gateway only" enabled="true"/>
+        <RandomOrderController guiclass="RandomOrderControllerGui" testclass="RandomOrderController" testname="Test call via API Gateway only" enabled="false"/>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SimpleService call via gateway" enabled="true">
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
@@ -146,7 +146,7 @@
           </HTTPSamplerProxy>
           <hashTree/>
         </hashTree>
-        <PoissonRandomTimer guiclass="PoissonRandomTimerGui" testclass="PoissonRandomTimer" testname="Poisson Random Timer" enabled="true">
+        <PoissonRandomTimer guiclass="PoissonRandomTimerGui" testclass="PoissonRandomTimer" testname="Poisson Random Timer" enabled="false">
           <stringProp name="ConstantTimer.delay">300</stringProp>
           <stringProp name="RandomTimer.range">300</stringProp>
         </PoissonRandomTimer>
@@ -187,6 +187,20 @@
         </objProp>
         <stringProp name="filename"></stringProp>
       </ResultCollector>
+      <hashTree/>
+      <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+          <collectionProp name="Arguments.arguments"/>
+        </elementProp>
+        <stringProp name="HTTPSampler.domain">ECSC00A00829.epam.com</stringProp>
+        <stringProp name="HTTPSampler.port"></stringProp>
+        <stringProp name="HTTPSampler.protocol">http</stringProp>
+        <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+        <stringProp name="HTTPSampler.path"></stringProp>
+        <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+        <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+        <stringProp name="HTTPSampler.response_timeout"></stringProp>
+      </ConfigTestElement>
       <hashTree/>
     </hashTree>
     <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
