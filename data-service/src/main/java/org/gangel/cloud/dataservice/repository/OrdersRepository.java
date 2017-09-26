@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RepositoryRestResource(path="/orders")
-public interface OrdersRepository extends PagingAndSortingRepository<Orders, String> {
+public interface OrdersRepository extends PagingAndSortingRepository<Orders, Long> {
 
 }

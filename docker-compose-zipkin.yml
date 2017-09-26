@@ -1,0 +1,25 @@
+version: '3'
+services:
+  elastic-zipkin:
+    image: openzipkin/zipkin-elasticsearch:2.0.1
+    ports: 
+      - "9201:9201"
+  zipkin:
+    image: openzipkin/zipkin:2.0.1
+    ports:
+     - "9411:9411"
+    environment:
+     - STORAGE_TPE=elasticsearch
+     - ES_HOSTS=http://elastic-zipkin:92001
+    depends_on:
+     - elastic-zipkin
+  zipkin-ui:
+    image: openzipkin/zipkin-ui:2.0.1
+    container_name: zipkin-ui
+    environment:
+      # Change this if connecting to a different zipkin server
+      - ZIPKIN_BASE_URL=http://zipkin:9411
+    ports:
+      - 8881:80
+    depends_on:
+      - zipkin
