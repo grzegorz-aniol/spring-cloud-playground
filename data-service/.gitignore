@@ -21,4 +21,5 @@ build/
 nbbuild/
 dist/
 nbdist/
-.nb-gradle/
+.nb-gradle/dataservice*.log 
+*.log
