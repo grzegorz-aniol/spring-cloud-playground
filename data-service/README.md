@@ -1,1 +1,7 @@
-Implementation for Customer-Order-Product using Spring REST Data with Jetty web server. 
+Rest API for managing Customer-Order-Product.
+
+Stack:
+- Spring Boot
+- Spring REST Data
+- MySQL
+- Jetty web server. 
