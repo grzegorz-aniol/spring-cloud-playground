@@ -36,7 +36,7 @@ public class OrderItem implements Comparable<OrderItem>{
     @Column(nullable=false)
     private Integer lineNumber; 
     
-    @JsonBackReference("product")
+//    @JsonBackReference("product")
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     private Product product;
     

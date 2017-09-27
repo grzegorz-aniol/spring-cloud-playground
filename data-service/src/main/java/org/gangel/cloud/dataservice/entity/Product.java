@@ -46,7 +46,7 @@ public class Product {
     @Temporal(TemporalType.TIMESTAMP)    
     private Date modificationDate;
     
-    @JsonManagedReference("product")
+    //@JsonManagedReference("product")
     @OneToMany(cascade=CascadeType.ALL, mappedBy="product")
     private List<OrderItem> orderItems;
     
