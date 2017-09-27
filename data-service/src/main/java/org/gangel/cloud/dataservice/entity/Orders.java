@@ -1,10 +1,14 @@
 package org.gangel.cloud.dataservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,11 +18,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 @Getter @Setter
+@EqualsAndHashCode(of="id")
+@Slf4j
 public class Orders {
 
     @Id
@@ -33,9 +42,16 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)    
     private Date modificationDate;
     
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
     private Customer customer; 
     
-    @ManyToMany
-    private List<Product> products; 
+    @JsonManagedReference("order")
+    @OneToMany(mappedBy="order", cascade=CascadeType.ALL)
+    @OrderBy("id, lineNumber")
+    private SortedSet<OrderItem> orderItems; 
+    
+    @PrePersist
+    public void updateConstraints() {
+        log.debug("Save an order");
+    }
 }
