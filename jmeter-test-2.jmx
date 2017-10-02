@@ -152,7 +152,7 @@
           <intProp name="ThroughputController.maxThroughput">1</intProp>
           <FloatProperty>
             <name>ThroughputController.percentThroughput</name>
-            <value>0.8</value>
+            <value>80.0</value>
             <savedValue>0.0</savedValue>
           </FloatProperty>
         </ThroughputController>
@@ -245,7 +245,7 @@
           <intProp name="ThroughputController.maxThroughput">1</intProp>
           <FloatProperty>
             <name>ThroughputController.percentThroughput</name>
-            <value>0.2</value>
+            <value>20.0</value>
             <savedValue>0.0</savedValue>
           </FloatProperty>
         </ThroughputController>
@@ -256,7 +256,7 @@
             <intProp name="ThroughputController.maxThroughput">1</intProp>
             <FloatProperty>
               <name>ThroughputController.percentThroughput</name>
-              <value>0.9</value>
+              <value>90.0</value>
               <savedValue>0.0</savedValue>
             </FloatProperty>
           </ThroughputController>
@@ -331,7 +331,7 @@
             <intProp name="ThroughputController.maxThroughput">1</intProp>
             <FloatProperty>
               <name>ThroughputController.percentThroughput</name>
-              <value>0.1</value>
+              <value>10.0</value>
               <savedValue>0.0</savedValue>
             </FloatProperty>
           </ThroughputController>
