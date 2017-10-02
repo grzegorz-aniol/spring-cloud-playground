@@ -1,7 +1,10 @@
 package org.gangel.cloud.dataservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,9 +41,13 @@ public class OrderItem implements Comparable<OrderItem>{
     
 //    @JsonBackReference("product")
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Product product;
     
     @JsonBackReference("order")
+//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     private Orders order;
     

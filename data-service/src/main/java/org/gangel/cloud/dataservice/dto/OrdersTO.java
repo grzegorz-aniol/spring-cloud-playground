@@ -1,0 +1,27 @@
+package org.gangel.cloud.dataservice.dto;
+
+import com.fasterxml.jackson.annotation.JsonRootName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Getter @Setter @Builder 
+@NoArgsConstructor @AllArgsConstructor
+@JsonRootName("order") 
+public class OrdersTO implements Serializable {
+
+    private static final long serialVersionUID = 3170312039886244704L;
+    
+    private Long id; 
+    
+    private Long customerId;
+        
+    private List<OrderItemTO> orderItems;
+    
+
+}

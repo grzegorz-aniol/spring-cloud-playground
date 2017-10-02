@@ -1,6 +1,9 @@
 package org.gangel.cloud.dataservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,10 +45,14 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)    
     private Date modificationDate;
     
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     private Customer customer; 
     
     @JsonManagedReference("order")
+//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy="order", cascade=CascadeType.ALL)
     @OrderBy("id, lineNumber")
     private SortedSet<OrderItem> orderItems; 
