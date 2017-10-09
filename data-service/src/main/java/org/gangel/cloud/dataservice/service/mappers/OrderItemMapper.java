@@ -22,11 +22,6 @@ import org.springframework.stereotype.Component;
         uses={ProductMapper.class})
 public abstract class OrderItemMapper extends AbstractMapper<OrderItem, OrderItemTO, Long> {
 
-    @Override
-    protected Class<OrderItem> getEntityClass() {
-        return OrderItem.class;
-    }
-
     @Mappings({
         @Mapping(target="position", source="lineNumber"),
         @Mapping(target="productId", source="product.id")

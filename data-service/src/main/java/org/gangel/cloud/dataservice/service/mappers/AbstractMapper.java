@@ -20,23 +20,16 @@ public abstract class AbstractMapper<E extends AbstractEntity<ID>, T extends DTO
 
     @PersistenceContext
     protected EntityManager entityManager;
-    
-    protected abstract Class<E> getEntityClass();
-    
-    @SneakyThrows
-    protected E newInstance() {
-        return getEntityClass().newInstance();
-    }
-    
+
     @ObjectFactory
     @SneakyThrows
-    public E entityFactory(T source, @TargetType Class<?> cls) {
+    public E entityFactory(T source, @TargetType Class<E> cls) {
         if (source == null || source.getId() == null) {
-            return newInstance();
+            return cls.newInstance();
         }
-        E result = entityManager.find(getEntityClass(), source.getId());
+        E result = entityManager.find(cls, source.getId());
         if (result == null) {
-            result = newInstance();
+            result = cls.newInstance();
         }
         return result;
     }

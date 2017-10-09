@@ -11,11 +11,6 @@ import org.springframework.stereotype.Component;
 @Mapper(unmappedTargetPolicy=ReportingPolicy.WARN, nullValueCheckStrategy=NullValueCheckStrategy.ALWAYS)
 public abstract class ProductMapper extends AbstractMapper<Product, ProductTO, Long>{
 
-    @Override
-    protected Class<Product> getEntityClass() {
-        return Product.class;
-    }
-
     public abstract ProductTO toDTO(Product source);
 
     public abstract Product toEntity(ProductTO source);

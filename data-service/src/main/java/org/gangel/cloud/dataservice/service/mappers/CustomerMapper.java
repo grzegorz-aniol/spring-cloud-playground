@@ -12,11 +12,6 @@ import org.springframework.stereotype.Component;
 @Mapper(unmappedTargetPolicy=ReportingPolicy.WARN, nullValueCheckStrategy=NullValueCheckStrategy.ALWAYS)
 public abstract class CustomerMapper extends AbstractMapper<Customer, CustomerTO, Long> {
 
-    @Override
-    protected Class<Customer> getEntityClass() {
-        return Customer.class;
-    }
-
     public abstract CustomerTO toDTO(Customer source);
 
     public abstract Customer toEntity(CustomerTO source);

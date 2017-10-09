@@ -35,10 +35,4 @@ public abstract class OrdersMapper extends AbstractMapper<Orders, OrdersTO, Long
         }
     }
 
-    @Override
-    protected Class<Orders> getEntityClass() {
-        return Orders.class;
-    }
-    
-    
 }
