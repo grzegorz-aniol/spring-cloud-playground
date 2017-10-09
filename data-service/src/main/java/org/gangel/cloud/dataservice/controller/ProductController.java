@@ -1,28 +1,23 @@
 package org.gangel.cloud.dataservice.controller;
 
+import org.gangel.cloud.dataservice.dto.ProductTO;
 import org.gangel.cloud.dataservice.entity.Product;
-import org.gangel.cloud.dataservice.repository.ProductRepository;
+import org.gangel.cloud.dataservice.service.AbstractService;
+import org.gangel.cloud.dataservice.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api2/products")
-public class ProductController {
+public class ProductController extends AbstractController<Product, ProductTO, Long>{
 
     @Autowired
-    private ProductRepository productRepo;
+    private ProductService service;
     
-    @RequestMapping(method=RequestMethod.GET, path="/{id}")
-    public Product getProduct(@PathVariable("id") Long id) {
-        return productRepo.findOne(id);
-    }
-    
-    @RequestMapping(method=RequestMethod.POST, path="/") 
-    public void addNewProduct(Product product) {
-        productRepo.save(product);
+    @Override
+    protected AbstractService<Product, ProductTO, Long> getService() {
+        return this.service;
     }
     
 }

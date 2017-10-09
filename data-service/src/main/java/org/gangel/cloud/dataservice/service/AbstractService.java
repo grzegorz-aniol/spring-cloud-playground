@@ -1,0 +1,56 @@
+package org.gangel.cloud.dataservice.service;
+
+import org.gangel.cloud.dataservice.dto.DTO;
+import org.gangel.cloud.dataservice.entity.AbstractEntity;
+import org.gangel.cloud.dataservice.service.mappers.AbstractMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
+
+import javax.persistence.EntityNotFoundException;
+
+public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DTO<ID>, ID extends Serializable> {
+
+    protected abstract PagingAndSortingRepository<E, ID> getRepo();
+    
+    protected abstract AbstractMapper< E, T, ID> getMapper(); 
+    
+    @Transactional(readOnly=true)
+    public T getById(ID identifier) {
+        E entity = getRepo().findOne(identifier);
+        if (entity == null) {
+            return null;
+        }
+        return getMapper().toDTO(entity);
+    }
+    
+    @Transactional
+    public void save(T dto) {
+        if (dto == null) {
+            return;
+        }
+        E entity = getMapper().toEntity(dto);
+        getRepo().save(entity);
+    }
+    
+    @Transactional
+    public void update(ID id, T dto) {
+        if (dto == null) {
+            return; 
+        }
+        dto.setId(id);
+        E entity = getMapper().toEntity(dto);
+        if (entity == null) {
+            throw new EntityNotFoundException("Entity not found");
+        }
+    }
+    
+    @Transactional(readOnly=true)
+    public Page<T> getAll(Pageable pageable) {
+        return getRepo().findAll(pageable).map(e -> getMapper().toDTO(e));
+    }
+    
+}

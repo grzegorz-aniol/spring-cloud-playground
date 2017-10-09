@@ -19,37 +19,36 @@
 	</parent>
 
 	<properties>
-
-	<hibernate.version>5.2.8.Final</hibernate.version>
+		<!-- automatically run annotation processors within the incremental compilation -->
+		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
+		<hibernate.version>5.2.8.Final</hibernate.version>
+		<org.mapstruct.version>1.2.0.CR2</org.mapstruct.version>
+		<org.projectlombok.version>1.16.18</org.projectlombok.version>
 	</properties>
 
 	<dependencies>
-		<!--  Disable Tomcat server -->
+		<!-- Disable Tomcat server -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
-		        <exclusion>
-		            <groupId>org.springframework.boot</groupId>
-		            <artifactId>spring-boot-starter-tomcat</artifactId>
-		        </exclusion>
-		    </exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
-		<!--  Enable Jetty server -->
+
+		<!-- Enable Jetty server -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-jetty</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
 		</dependency>
-		
-		 <!-- Enable Undertow -->
-		 <!-- 
-		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-undertow</artifactId>
-		</dependency>
-		--> 
-		
+
+		<!-- Enable Undertow -->
+		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-undertow</artifactId> 
+			</dependency> -->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -57,14 +56,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-rest</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-rest-hal-browser</artifactId>
 		</dependency>
 
 		<dependency>
@@ -82,10 +73,17 @@
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 			<version>1.3.4.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>${org.projectlombok.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-jdk8</artifactId>
+			<version>${org.mapstruct.version}</version>
 		</dependency>
 
 		<dependency>
@@ -93,10 +91,12 @@
 			<artifactId>hibernate-java8</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.1-api</artifactId>
@@ -121,6 +121,10 @@
 			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
 			<version>1.2.4.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -129,6 +133,32 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<source>${java.version}</source> <!-- or higher, depending on your project -->
+					<target>${java.version}</target> <!-- or higher, depending on your project -->
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${org.projectlombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${org.mapstruct.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-Amapstruct.suppressGeneratorTimestamp=false</arg>
+						<arg>-Amapstruct.defaultComponentModel=spring</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 

@@ -26,11 +26,11 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Getter @Setter
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(callSuper=false, of="id")
 @Table(uniqueConstraints = 
     @UniqueConstraint(columnNames = {"order_id", "lineNumber"}, name = "UNIQUE_ORDER_NUMBER")
 )
-public class OrderItem implements Comparable<OrderItem>{
+public class OrderItem extends AbstractEntity<Long> implements Comparable<OrderItem>{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -39,15 +39,12 @@ public class OrderItem implements Comparable<OrderItem>{
     @Column(nullable=false)
     private Integer lineNumber; 
     
-//    @JsonBackReference("product")
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     private Product product;
     
     @JsonBackReference("order")
-//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-//    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     private Orders order;
     

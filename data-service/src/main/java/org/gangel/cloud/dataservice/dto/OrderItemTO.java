@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter @Setter @Builder
 @NoArgsConstructor @AllArgsConstructor
 @JsonRootName("order_item")
-public class OrderItemTO implements Serializable {
+public class OrderItemTO implements Serializable, DTO<Long> {
 
     private static final long serialVersionUID = -5296568930869499662L;
     

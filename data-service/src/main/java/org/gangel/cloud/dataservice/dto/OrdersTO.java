@@ -13,7 +13,7 @@ import java.util.List;
 @Getter @Setter @Builder 
 @NoArgsConstructor @AllArgsConstructor
 @JsonRootName("order") 
-public class OrdersTO implements Serializable {
+public class OrdersTO implements Serializable, DTO<Long> {
 
     private static final long serialVersionUID = 3170312039886244704L;
     
@@ -23,5 +23,4 @@ public class OrdersTO implements Serializable {
         
     private List<OrderItemTO> orderItems;
     
-
 }

@@ -29,21 +29,13 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Getter @Setter
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(callSuper=false, of="id")
 @Slf4j
-public class Orders {
+public class Orders extends BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id; 
-    
-    @Column(name = "create_date", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)    
-    private Date createDate;
-    
-    @Column(name = "modification_date", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP")
-    @Temporal(TemporalType.TIMESTAMP)    
-    private Date modificationDate;
     
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
@@ -51,14 +43,8 @@ public class Orders {
     private Customer customer; 
     
     @JsonManagedReference("order")
-//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-//    @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy="order", cascade=CascadeType.ALL)
     @OrderBy("id, lineNumber")
     private SortedSet<OrderItem> orderItems; 
     
-    @PrePersist
-    public void updateConstraints() {
-        log.debug("Save an order");
-    }
 }

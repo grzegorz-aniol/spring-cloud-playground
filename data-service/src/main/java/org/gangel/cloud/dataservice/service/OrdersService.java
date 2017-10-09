@@ -4,12 +4,14 @@ import org.gangel.cloud.dataservice.dto.OrdersTO;
 import org.gangel.cloud.dataservice.entity.Orders;
 import org.gangel.cloud.dataservice.repository.CustomerRepository;
 import org.gangel.cloud.dataservice.repository.OrdersRepository;
+import org.gangel.cloud.dataservice.service.mappers.AbstractMapper;
+import org.gangel.cloud.dataservice.service.mappers.OrdersMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class OrdersService {
+public class OrdersService extends AbstractService<Orders, OrdersTO, Long> {
 
     @Autowired
     protected CustomerRepository customerRepo;
@@ -18,27 +20,15 @@ public class OrdersService {
     protected OrdersRepository ordersRepo;
 
     @Autowired
-    protected OrderItemMapper orderItemMapper;
-
-    @Autowired
-    protected OrderMapper orderMapper;
+    protected OrdersMapper mapper;
     
-    @Transactional
-    public void addNewOrder(OrdersTO orderTO) {
-        orderTO.setId(null);
-        Orders order = orderMapper.map(orderTO);
-        ordersRepo.save(order);
+    @Override
+    protected PagingAndSortingRepository<Orders, Long> getRepo() {
+        return ordersRepo;
     }
-    
-    @Transactional
-    public OrdersTO getOrder(long orderId) {
-        
-        Orders orders = ordersRepo.findOne(orderId);
-        if (orders == null) {
-            return null;
-        }
-        
-        return orderMapper.map(orders);        
+
+    protected AbstractMapper<Orders, OrdersTO, Long> getMapper() {
+        return mapper; 
     }
     
 }

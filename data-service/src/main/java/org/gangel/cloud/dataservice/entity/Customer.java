@@ -13,8 +13,8 @@ import javax.persistence.Id;
 
 @Entity
 @Getter @Setter
-@EqualsAndHashCode(of="id")
-public class Customer {
+@EqualsAndHashCode(callSuper=false, of="id")
+public class Customer extends BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
