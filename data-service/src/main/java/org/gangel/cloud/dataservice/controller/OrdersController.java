@@ -15,15 +15,22 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api2/orders")
+@RequestMapping(OrdersController.ENDPOINT)
 public class OrdersController extends AbstractController<Orders, OrdersTO, Long> {
 
+    public final static String ENDPOINT = "/api2/orders"; 
+    
     @Autowired
     private OrdersService ordersService;
     
     @Override
     protected AbstractService<Orders, OrdersTO, Long> getService() {
         return ordersService;
+    }
+
+    @Override
+    protected String getEndpointRoot() {
+        return ENDPOINT;
     }
     
 }

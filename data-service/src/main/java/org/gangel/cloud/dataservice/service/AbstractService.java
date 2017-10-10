@@ -28,12 +28,23 @@ public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DT
     }
     
     @Transactional
-    public void save(T dto) {
+    public ID save(T dto) {
         if (dto == null) {
-            return;
+            return null;
         }
         E entity = getMapper().toEntity(dto);
-        getRepo().save(entity);
+        entity = getRepo().save(entity);
+        return (entity != null ? entity.getId() : null);
+    }
+    
+    @Transactional
+    public T saveAndGet(T dto) {
+        if (dto == null) {
+            return null;
+        }
+        E entity = getMapper().toEntity(dto);
+        entity = getRepo().save(entity);
+        return getMapper().toDTO(entity);
     }
     
     @Transactional

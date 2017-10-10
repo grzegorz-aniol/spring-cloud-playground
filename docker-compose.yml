@@ -18,6 +18,7 @@ services:
     image: postgres:10.0-alpine
 #    image: postgres:9.6.5-alpine
 #    image: postgres:9.4.14-alpine
+#    image: postgres:9.4.14
     environment:
      - "POSTGRES_PASSWORD=admin"
 #     - "POSTGRES_INITDB_ARGS=--locale=en_US.utf8"

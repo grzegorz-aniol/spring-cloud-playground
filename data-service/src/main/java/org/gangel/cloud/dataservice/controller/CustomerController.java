@@ -12,12 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api2/customers")
 public class CustomerController extends AbstractController<Customer, CustomerTO, Long> {
 
+    public final static String ENDPOINT = "/api2/customers"; 
+    
     @Autowired
     protected CustomerService service;
     
     @Override
     protected AbstractService<Customer, CustomerTO, Long> getService() {
         return service;
+    }
+
+    @Override
+    protected String getEndpointRoot() {
+        return ENDPOINT;
     }
     
 }
