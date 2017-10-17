@@ -1,0 +1,4 @@
+org\gangel\cloud\dataservice\service\mappers\CustomerMapperImpl.class
+org\gangel\cloud\dataservice\service\mappers\OrdersMapperImpl.class
+org\gangel\cloud\dataservice\service\mappers\OrderItemMapperImpl.class
+org\gangel\cloud\dataservice\service\mappers\ProductMapperImpl.class
