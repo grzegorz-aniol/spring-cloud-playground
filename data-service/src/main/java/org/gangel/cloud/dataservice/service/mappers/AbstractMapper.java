@@ -2,8 +2,7 @@ package org.gangel.cloud.dataservice.service.mappers;
 
 import lombok.SneakyThrows;
 import org.gangel.cloud.dataservice.dto.DTO;
-import org.gangel.cloud.dataservice.entity.AbstractEntity;
-import org.gangel.cloud.dataservice.entity.Product;
+import org.gangel.orders.entity.AbstractEntity;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.TargetType;
 import org.springframework.beans.factory.annotation.Autowired;

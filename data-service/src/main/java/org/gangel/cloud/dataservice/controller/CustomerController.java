@@ -1,7 +1,7 @@
 package org.gangel.cloud.dataservice.controller;
 
 import org.gangel.cloud.dataservice.dto.CustomerTO;
-import org.gangel.cloud.dataservice.entity.Customer;
+import org.gangel.orders.entity.Customer;
 import org.gangel.cloud.dataservice.service.AbstractService;
 import org.gangel.cloud.dataservice.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package org.gangel.cloud.dataservice.service.mappers;
 
 import org.gangel.cloud.dataservice.dto.DTO;
-import org.gangel.cloud.dataservice.entity.AbstractEntity;
+import org.gangel.orders.entity.AbstractEntity;
 import org.springframework.data.domain.Page;
 
 import java.io.Serializable;

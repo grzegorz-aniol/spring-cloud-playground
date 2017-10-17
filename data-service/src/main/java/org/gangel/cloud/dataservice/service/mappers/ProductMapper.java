@@ -1,7 +1,7 @@
 package org.gangel.cloud.dataservice.service.mappers;
 
 import org.gangel.cloud.dataservice.dto.ProductTO;
-import org.gangel.cloud.dataservice.entity.Product;
+import org.gangel.orders.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.ReportingPolicy;

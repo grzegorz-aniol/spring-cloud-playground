@@ -1,7 +1,7 @@
 package org.gangel.cloud.dataservice.service;
 
 import org.gangel.cloud.dataservice.dto.ProductTO;
-import org.gangel.cloud.dataservice.entity.Product;
+import org.gangel.orders.entity.Product;
 import org.gangel.cloud.dataservice.repository.ProductRepository;
 import org.gangel.cloud.dataservice.service.mappers.AbstractMapper;
 import org.gangel.cloud.dataservice.service.mappers.ProductMapper;

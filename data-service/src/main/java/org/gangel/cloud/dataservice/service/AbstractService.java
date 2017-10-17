@@ -1,8 +1,8 @@
 package org.gangel.cloud.dataservice.service;
 
 import org.gangel.cloud.dataservice.dto.DTO;
-import org.gangel.cloud.dataservice.entity.AbstractEntity;
 import org.gangel.cloud.dataservice.service.mappers.AbstractMapper;
+import org.gangel.orders.entity.AbstractEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -16,7 +16,7 @@ public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DT
 
     protected abstract PagingAndSortingRepository<E, ID> getRepo();
     
-    protected abstract AbstractMapper< E, T, ID> getMapper(); 
+    protected abstract AbstractMapper<E, T, ID> getMapper(); 
     
     @Transactional(readOnly=true)
     public T getById(ID identifier) {

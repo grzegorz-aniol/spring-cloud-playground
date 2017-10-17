@@ -1,19 +1,12 @@
 package org.gangel.cloud.dataservice.service.mappers;
 
 import org.gangel.cloud.dataservice.dto.OrderItemTO;
-import org.gangel.cloud.dataservice.entity.OrderItem;
-import org.gangel.cloud.dataservice.entity.Orders;
-import org.gangel.cloud.dataservice.entity.Product;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Context;
+import org.gangel.orders.entity.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.ReportingPolicy;
-import org.mapstruct.TargetType;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 
 

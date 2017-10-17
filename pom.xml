@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.gangel.eureka</groupId>
@@ -18,8 +17,9 @@
 		<module>hystrix</module>
 		<module>simple-service</module>
 		<module>simple-client</module>
+    	<module>orders-sql-service</module>
 		<module>data-service</module>
-	</modules>
+  </modules>
 	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -32,6 +32,9 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Dalston.SR3</spring-cloud.version>
+		<hibernate.version>5.2.8.Final</hibernate.version>
+		<org.mapstruct.version>1.2.0.CR2</org.mapstruct.version>
+		<org.projectlombok.version>1.16.18</org.projectlombok.version>
 	</properties>
 
 </project>

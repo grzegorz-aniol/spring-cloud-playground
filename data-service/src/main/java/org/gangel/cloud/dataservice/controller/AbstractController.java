@@ -1,7 +1,7 @@
 package org.gangel.cloud.dataservice.controller;
 
 import org.gangel.cloud.dataservice.dto.DTO;
-import org.gangel.cloud.dataservice.entity.AbstractEntity;
+import org.gangel.orders.entity.AbstractEntity;
 import org.gangel.cloud.dataservice.service.AbstractService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

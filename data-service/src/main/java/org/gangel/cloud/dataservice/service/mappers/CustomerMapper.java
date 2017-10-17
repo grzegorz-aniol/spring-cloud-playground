@@ -1,11 +1,10 @@
 package org.gangel.cloud.dataservice.service.mappers;
 
 import org.gangel.cloud.dataservice.dto.CustomerTO;
-import org.gangel.cloud.dataservice.entity.Customer;
+import org.gangel.orders.entity.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.ReportingPolicy;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 
 @Component

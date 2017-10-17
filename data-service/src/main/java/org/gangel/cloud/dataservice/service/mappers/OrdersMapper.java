@@ -1,7 +1,7 @@
 package org.gangel.cloud.dataservice.service.mappers;
 
 import org.gangel.cloud.dataservice.dto.OrdersTO;
-import org.gangel.cloud.dataservice.entity.Orders;
+import org.gangel.orders.entity.Orders;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
