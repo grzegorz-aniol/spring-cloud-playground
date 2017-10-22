@@ -1,5 +1,7 @@
 package org.gangel.orders.entity;
 
+import org.gangel.common.services.AbstractEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 

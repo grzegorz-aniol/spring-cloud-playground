@@ -3,6 +3,7 @@ package org.gangel.orders.entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.gangel.common.services.AbstractEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

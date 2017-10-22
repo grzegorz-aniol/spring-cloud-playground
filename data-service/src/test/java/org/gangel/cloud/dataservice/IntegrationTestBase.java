@@ -1,13 +1,14 @@
 package org.gangel.cloud.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.gangel.cloud.dataservice.dto.CustomerTO;
-import org.gangel.cloud.dataservice.dto.ProductTO;
+import org.gangel.orders.dto.CustomerTO;
+import org.gangel.orders.dto.ProductTO;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
@@ -21,8 +22,9 @@ import java.util.Random;
 import java.util.UUID;
 
 @RunWith(SpringRunner.class)
-@ActiveProfiles("pgsql")
+@ActiveProfiles({"default", "itest", "pgsql"})
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+@Configuration()
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
 public class IntegrationTestBase {
 

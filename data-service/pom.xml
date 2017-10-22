@@ -28,7 +28,7 @@
 
 	<dependencies>
 		<dependency>
-			  <groupId>org.gangel.orders</groupId>
+ 			  <groupId>org.gangel.orders</groupId>
 			  <artifactId>orders-sql-service</artifactId>
 			  <version>1.0-SNAPSHOT</version>			
 		</dependency>
@@ -83,7 +83,6 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${org.projectlombok.version}</version>
 		</dependency>
 
 		<dependency>
@@ -131,6 +130,11 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.gangel.common.services</groupId>
+			<artifactId>abstract-service</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

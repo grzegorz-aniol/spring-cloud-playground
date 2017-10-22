@@ -15,6 +15,7 @@
 		<module>discovery-server</module>
 		<module>gateway-service</module>
 		<module>hystrix</module>
+		<module>abstract-service</module>
 		<module>simple-service</module>
 		<module>simple-client</module>
     	<module>orders-sql-service</module>

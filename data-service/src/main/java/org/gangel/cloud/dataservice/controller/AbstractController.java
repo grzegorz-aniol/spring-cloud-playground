@@ -1,8 +1,8 @@
 package org.gangel.cloud.dataservice.controller;
 
-import org.gangel.cloud.dataservice.dto.DTO;
-import org.gangel.orders.entity.AbstractEntity;
-import org.gangel.cloud.dataservice.service.AbstractService;
+import org.gangel.common.services.AbstractEntity;
+import org.gangel.common.services.AbstractService;
+import org.gangel.common.services.DTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;

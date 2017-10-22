@@ -3,7 +3,6 @@ package org.gangel.orders.entity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.SortedSet;
 
@@ -19,7 +18,6 @@ import javax.persistence.OrderBy;
 @Entity
 @Getter @Setter
 @EqualsAndHashCode(callSuper=false, of="id")
-@Slf4j
 public class Orders extends BaseEntity<Long> {
 
     @Id

@@ -1,17 +1,11 @@
 package org.gangel.cloud.dataservice.controller;
 
-import org.gangel.cloud.dataservice.dto.OrdersTO;
+import org.gangel.common.services.AbstractService;
+import org.gangel.orders.dto.OrdersTO;
 import org.gangel.orders.entity.Orders;
-import org.gangel.cloud.dataservice.repository.OrdersRepository;
-import org.gangel.cloud.dataservice.service.AbstractService;
-import org.gangel.cloud.dataservice.service.OrdersService;
+import org.gangel.orders.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
