@@ -1,5 +1,6 @@
 package org.gangel.cloud.dataservice.controller;
 
+import org.gangel.common.services.AbstractController;
 import org.gangel.common.services.AbstractService;
 import org.gangel.orders.dto.ProductTO;
 import org.gangel.orders.entity.Product;
