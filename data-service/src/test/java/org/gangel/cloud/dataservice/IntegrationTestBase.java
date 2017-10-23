@@ -1,6 +1,7 @@
 package org.gangel.cloud.dataservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.gangel.orders.dto.CustomerTO;
 import org.gangel.orders.dto.ProductTO;
 import org.junit.Before;
@@ -16,10 +17,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles({"default", "itest", "pgsql"})
@@ -38,6 +45,9 @@ public class IntegrationTestBase {
     
     @Autowired
     protected WebApplicationContext wac;
+    
+    @PersistenceContext
+    protected EntityManager entityManager; 
     
     private Random rnd = new Random();
 
@@ -70,4 +80,16 @@ public class IntegrationTestBase {
         return c;
     }
 
+    @SneakyThrows
+    @Transactional(propagation=Propagation.NESTED)
+    protected <T> T inTransaction(Callable<T> task) {
+        T result = task.call();
+        return result; 
+    }
+
+    @Transactional(propagation=Propagation.NESTED)
+    protected void inTransaction(Runnable task) {
+        task.run();
+    }
+    
 }
