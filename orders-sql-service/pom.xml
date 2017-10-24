@@ -18,8 +18,6 @@
 		<!-- automatically run annotation processors within the incremental compilation -->
 		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
 		<hibernate.version>5.2.8.Final</hibernate.version>
-		<org.mapstruct.version>1.2.0.CR2</org.mapstruct.version>
-		<org.projectlombok.version>1.16.18</org.projectlombok.version>
 	</properties>	
 	
 	<dependencies>
