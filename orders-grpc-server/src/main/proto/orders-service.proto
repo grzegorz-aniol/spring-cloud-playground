@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import 'orders.proto';
+
+package org.gangel.orders;
+
+option java_package = "org.gangel.orders.proto";
+
+message NewCustomerRequest {
+	Customer customer = 1;
+}
+message NewCustomerResponse {
+	int64 id = 1;
+}
+
+message GetCustomerRequest {
+	int64 id = 1; 
+}
+
+message GetCustomerResponse {
+	Customer customer = 1;
+}
+
+service OrdersService {
+	
+	rpc CreateNewCustomer(NewCustomerRequest) returns (NewCustomerResponse) {}
+	rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {}
+
+}
