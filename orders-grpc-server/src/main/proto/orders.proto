@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package org.gangel.orders;
+
+option java_package = "org.gangel.orders.proto";
+option java_multiple_files = true;
+
+message Customer {
+    int64 id = 1;     
+    string name = 2;
+    string lastname = 3;
+    string phone = 16;
+    string email = 17;
+}
+
+message Product {
+	int64 id = 1;     
+    string title = 2;
+    string description = 3;
+    double price = 4;
+}
+
+message OrderItem {
+    int64 id = 1; 
+    int32 line_number = 2; 
+    int64 product_id = 3;
+    int32 quantity = 4;
+    double amount = 5;
+}
+    
+message Orders {    
+    int64 id = 1; 
+    int64 customer_id = 2; 
+    repeated OrderItem orderItem = 3; 
+}

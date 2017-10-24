@@ -27,5 +27,4 @@ public abstract class BaseEntity<ID extends Serializable> extends AbstractEntity
         this.modificationDate = new Date();
     }
     
-
 }
