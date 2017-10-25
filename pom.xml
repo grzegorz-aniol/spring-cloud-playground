@@ -20,7 +20,9 @@
 		<module>simple-client</module>
     	<module>orders-sql-service</module>
 		<module>data-service</module>
-    <module>orders-grpc-server</module>
+		<module>orders-grpc-server</module>
+		<module>orders-grpc-client</module>
+		<module>orders-grpc-common</module>
   </modules>
 	
 	<parent>

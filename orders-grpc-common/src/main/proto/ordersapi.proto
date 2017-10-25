@@ -2,9 +2,16 @@ syntax = "proto3";
 
 import 'orders.proto';
 
-package org.gangel.orders;
+package orders;
 
+option java_multiple_files = true;
 option java_package = "org.gangel.orders.proto";
+option java_outer_classname = "OrdersProto";
+
+service OrdersService {
+	rpc CreateNewCustomer(NewCustomerRequest) returns (NewCustomerResponse) {}
+	rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {}
+}
 
 message NewCustomerRequest {
 	Customer customer = 1;
@@ -21,9 +28,3 @@ message GetCustomerResponse {
 	Customer customer = 1;
 }
 
-service OrdersService {
-	
-	rpc CreateNewCustomer(NewCustomerRequest) returns (NewCustomerResponse) {}
-	rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {}
-
-}

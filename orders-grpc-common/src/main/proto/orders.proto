@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package org.gangel.orders;
+package orders;
 
 option java_package = "org.gangel.orders.proto";
 option java_multiple_files = true;
