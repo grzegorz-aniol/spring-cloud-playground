@@ -15,7 +15,8 @@ public class OrdersService extends OrdersServiceImplBase  {
     @Override
     public void createNewCustomer(NewCustomerRequest request,
             StreamObserver<NewCustomerResponse> responseObserver) {
-        responseObserver.onNext(NewCustomerResponse.newBuilder().setId(1).build());        
+        responseObserver.onNext(NewCustomerResponse.newBuilder().setId(1).build());
+        responseObserver.onCompleted();
     }
 
     @Override
@@ -29,6 +30,7 @@ public class OrdersService extends OrdersServiceImplBase  {
                         .build())
                 .build()
         );
+        responseObserver.onCompleted();
     }
 
 }
