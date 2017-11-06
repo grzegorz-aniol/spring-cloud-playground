@@ -1,0 +1,12 @@
+// Text messages (HTTP 1.1)
+Total time = 36,151; IOPS = 1383; average latency = 0,72 ms
+Total time = 29,668; IOPS = 1685; average latency = 0,59 ms
+Total time = 30,933; IOPS = 1616; average latency = 0,62 ms
+
+Execution time = 15,783 sec; IOPS = 1901; average latency = 1,20 ms
+Execution time = 14,760 sec; IOPS = 2033; average latency = 1,14 ms
+
+// Binary messages (HTTP 2.0)
+3 Threads, Total requests sent = 150000, Execution time = 53,133 sec; IOPS = 2823; avg response = 0,93 ms
+3 Threads, Total requests sent = 150000, Execution time = 53,475 sec; IOPS = 2805; avg response = 0,93 ms
+1 Thread, Total requests sent = 50000, Execution time = 39,268 sec; IOPS = 1273; avg response = 0,66 ms

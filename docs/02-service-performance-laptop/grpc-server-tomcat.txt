@@ -1,7 +1,0 @@
-Total time = 36,151; IOPS = 1383; average latency = 0,72 ms
-Total time = 29,668; IOPS = 1685; average latency = 0,59 ms
-Total time = 30,933; IOPS = 1616; average latency = 0,62 ms
-
-Execution time = 15,783 sec; IOPS = 1901; average latency = 1,20 ms
-Execution time = 14,760 sec; IOPS = 2033; average latency = 1,14 ms
-
