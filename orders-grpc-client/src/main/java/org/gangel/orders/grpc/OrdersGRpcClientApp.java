@@ -144,7 +144,7 @@ public class OrdersGRpcClientApp {
         
         System.out.println("Starting " + numOfThreads + " threads...");
         
-        System.out.println("Waiting for temination...");
+        System.out.println("Waiting for termination...");
         
         ExecutorService executor = Executors.newFixedThreadPool(numOfThreads);
         List<Future<Long>> futures = null;

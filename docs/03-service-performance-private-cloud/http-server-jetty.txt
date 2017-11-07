@@ -1,0 +1,2 @@
+Execution time = 14,929 sec; Threads = 1; IOPS = 7; avg response = 142,17 ms
+Execution time = 198,713 sec; Threads = 2; IOPS = 15; avg response = 131,11 ms
