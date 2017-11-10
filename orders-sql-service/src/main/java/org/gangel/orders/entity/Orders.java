@@ -27,6 +27,11 @@ public class Orders extends BaseEntity<Long> {
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     private Customer customer; 
     
+//    private int totalQuantity;
+//    
+//    @Column(nullable=false, columnDefinition="numeric(10,2)")
+//    private double totalAmount; 
+    
     @OneToMany(mappedBy="order", cascade=CascadeType.ALL)
     @OrderBy("id, lineNumber")
     private SortedSet<OrderItem> orderItems; 

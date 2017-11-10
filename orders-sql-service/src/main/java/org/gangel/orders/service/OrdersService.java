@@ -31,5 +31,14 @@ public class OrdersService extends AbstractService<Orders, OrdersTO, Long> {
     protected AbstractMapper<Orders, OrdersTO, Long> getMapper() {
         return mapper; 
     }
+
+//    @Override
+//    public void beforeSave(@NonNull Orders entity) {
+//        //entity.getOrderItems().stream().mapToDouble(e -> e.getAmount() * e.getQuantity()).sum();
+//    }
+//
+//    @Override
+//    public void beforeUpdate(@NonNull Orders entity) {
+//    }
     
 }

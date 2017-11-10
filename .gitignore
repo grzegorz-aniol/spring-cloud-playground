@@ -1,3 +1,6 @@
+# execution scripts
+*.cmd
+
 # Compiled class file
 *.class
 
@@ -31,3 +34,7 @@ hs_err_pid*
 .settings
 .project
 .
+
+# sensitive files
+*.pem
+*.pem.pub

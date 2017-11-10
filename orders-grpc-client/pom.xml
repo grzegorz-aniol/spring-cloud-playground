@@ -11,6 +11,9 @@
   <artifactId>orders-grpc-client</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>orders-grpc-client</name>
+  <properties>
+  	<org.projectlombok.version>1.16.18</org.projectlombok.version>
+  </properties>
   <dependencies>
   	<dependency>
   		<groupId>${project.groupId}</groupId>
@@ -61,6 +64,11 @@
     	<artifactId>commons-cli</artifactId>
     	<version>1.4</version>
     </dependency>
+    <dependency>
+    	<groupId>org.projectlombok</groupId>
+    	<artifactId>lombok</artifactId>
+    	<version>${org.projectlombok.version}</version>
+    </dependency>
   </dependencies>
 	<build>
 		<extensions>
@@ -99,6 +107,13 @@
 					<source>1.8</source>
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${org.projectlombok.version}</version>						
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>

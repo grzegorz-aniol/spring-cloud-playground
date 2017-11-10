@@ -9,7 +9,9 @@ import java.io.Serializable;
 
 import javax.persistence.EntityNotFoundException;
 
-public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DTO<ID>, ID extends Serializable> {
+public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DTO<ID>, ID extends Serializable> 
+    implements ServiceListener<E, ID>
+    {
 
     protected abstract PagingAndSortingRepository<E, ID> getRepo();
     
@@ -21,7 +23,9 @@ public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DT
         if (entity == null) {
             return null;
         }
-        return getMapper().toDTO(entity);
+        onGet(entity);
+        T dto = getMapper().toDTO(entity);
+        return dto;
     }
     
     @Transactional
@@ -30,7 +34,9 @@ public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DT
             return null;
         }
         E entity = getMapper().toEntity(dto);
+        beforeSave(entity);
         entity = getRepo().save(entity);
+        afterSave(entity);
         return (entity != null ? entity.getId() : null);
     }
     
@@ -40,7 +46,9 @@ public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DT
             return null;
         }
         E entity = getMapper().toEntity(dto);
+        beforeSave(entity);
         entity = getRepo().save(entity);
+        afterSave(entity);
         return getMapper().toDTO(entity);
     }
     
@@ -49,11 +57,13 @@ public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DT
         if (dto == null) {
             return; 
         }
-        dto.setId(id);
+        dto.setId(id);      
+        beforeUpdate(getRepo().findOne(id));
         E entity = getMapper().toEntity(dto);
         if (entity == null) {
             throw new EntityNotFoundException("Entity not found");
         }
+        afterUpdate(entity);
     }
     
     @Transactional(readOnly=true)

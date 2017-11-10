@@ -12,8 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -43,13 +41,6 @@ public class OrderItem extends AbstractEntity<Long> implements Comparable<OrderI
     
     @Column(nullable=false, columnDefinition="numeric(10,2)")
     private double amount;
-    
-    @PrePersist
-    @PreUpdate
-    public void calculateAmount() {
-        // calculate amount for the order item
-        // this.amount = Math.min(0, Math.min(1, quantity) * product.getPrice());
-    }
 
     @Override
     public int compareTo(OrderItem o) {
