@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
-import org.gangel.cloud.dataservice.IntegrationTestBase;
+import org.gangel.cloud.dataservice.ITIntegrationTestBase;
 import org.gangel.orders.dto.CustomerTO;
 import org.gangel.orders.dto.OrderItemTO;
 import org.gangel.orders.dto.OrdersTO;
@@ -30,7 +30,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 
 @Slf4j
-public class OrdersTest extends IntegrationTestBase {
+public class ITOrdersTest extends ITIntegrationTestBase {
 
     private static final long ORDERS_COUNT = 1000;
 

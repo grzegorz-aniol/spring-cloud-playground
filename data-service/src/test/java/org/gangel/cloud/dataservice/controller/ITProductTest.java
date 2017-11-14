@@ -3,7 +3,7 @@ package org.gangel.cloud.dataservice.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.gangel.cloud.dataservice.IntegrationTestBase;
+import org.gangel.cloud.dataservice.ITIntegrationTestBase;
 import org.gangel.orders.dto.ProductTO;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public class ProductTest extends IntegrationTestBase {
+public class ITProductTest extends ITIntegrationTestBase {
 
     private final static int PRODUCTS_COUNT = 5;
 

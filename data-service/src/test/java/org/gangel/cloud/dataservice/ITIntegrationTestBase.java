@@ -33,7 +33,7 @@ import javax.persistence.PersistenceContext;
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 @Configuration()
 @DirtiesContext(classMode=ClassMode.AFTER_CLASS)
-public class IntegrationTestBase {
+public class ITIntegrationTestBase {
 
     @Autowired
     protected ObjectMapper objectMapper;
