@@ -74,6 +74,45 @@ public class OrdersMapperTest {
                     .quantity(2)
                     .amount(456)
                     .build())
+            .orderItem(org.gangel.orders.entity.OrderItem.builder()
+                    .id(457L)
+                    .lineNumber(2)
+                    .quantity(1)
+                    .amount(123)
+                    .build())                    
+            .orderItem(org.gangel.orders.entity.OrderItem.builder()
+                    .id(458L)
+                    .lineNumber(3)
+                    .quantity(12)
+                    .amount(120)
+                    .build())
+            .build();
+        
+        Orders orders = ordersMapper.map(ordersEntity).build();
+        
+        assertNotNull(orders);
+        assertEquals(123L, orders.getId());
+        
+        List<OrderItem> orderItemList = orders.getOrderItemList();
+        assertNotNull(orderItemList);
+        assertEquals(3, orderItemList.size());
+    }
+    
+    @Test
+    public void testSimpleEntityToProtoMapper() {
+        org.gangel.orders.entity.Orders ordersEntity = org.gangel.orders.entity.Orders.builder()
+            .id(123L)
+            .customer(org.gangel.orders.entity.Customer.builder()
+                    .id(234L)
+                    .email("email@domain.com")
+                    .name("customer")
+                    .build())
+            .orderItem(org.gangel.orders.entity.OrderItem.builder()
+                    .id(456L)
+                    .lineNumber(1)
+                    .quantity(2)
+                    .amount(456)
+                    .build())
             .build();
         
         Orders orders = ordersMapper.map(ordersEntity).build();
@@ -84,5 +123,5 @@ public class OrdersMapperTest {
         List<OrderItem> orderItemList = orders.getOrderItemList();
         assertNotNull(orderItemList);
         assertEquals(1, orderItemList.size());
-    }
+    }    
 }

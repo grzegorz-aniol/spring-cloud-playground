@@ -3,13 +3,10 @@ package org.gangel.orders.grpc.mappers;
 import lombok.val;
 import org.gangel.orders.grpc.mappers.OrderItemMapper.BuilderFactory;
 import org.gangel.orders.proto.OrderItem;
-import org.mapstruct.CollectionMappingStrategy;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Collection;
@@ -18,9 +15,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Mapper(uses={ BuilderFactory.class, CustomerMapper.class }, 
-        unmappedTargetPolicy = ReportingPolicy.WARN,
-        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+        config=MappingConfiguration.class   )
 public abstract class OrderItemMapper {
 
     public static OrderItemMapper INSTANCE = Mappers.getMapper(OrderItemMapper.class);

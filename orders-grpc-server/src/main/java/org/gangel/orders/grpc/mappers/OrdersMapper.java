@@ -8,15 +8,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(uses={ BuilderFactory.class, CustomerMapper.class, OrderItemMapper.class }, 
-        unmappedTargetPolicy = ReportingPolicy.WARN,
-        //collectionMappingStrategy = CollectionMappingStrategy.TARGET_IMMUTABLE,
-        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+        config=MappingConfiguration.class)
 public abstract class OrdersMapper {
 
     public static OrdersMapper INSTANCE = Mappers.getMapper(OrdersMapper.class);
@@ -37,7 +33,7 @@ public abstract class OrdersMapper {
     
     @AfterMapping
     public void mapOrderItems(@MappingTarget Orders.Builder builder, org.gangel.orders.entity.Orders ordersEntity ) {
-        if (ordersEntity != null && builder != null) {
+        if (ordersEntity != null && builder != null && ordersEntity.getOrderItems()!=null) {
             ordersEntity.getOrderItems().stream()
             .forEach((i) -> {
                 val v = orderItemMapper.map(i);
