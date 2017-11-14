@@ -1,8 +1,12 @@
 package org.gangel.orders.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.Singular;
 
 import java.util.SortedSet;
 
@@ -18,6 +22,8 @@ import javax.persistence.OrderBy;
 @Entity
 @Getter @Setter
 @EqualsAndHashCode(callSuper=false, of="id")
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Orders extends BaseEntity<Long> {
 
     @Id
@@ -34,6 +40,7 @@ public class Orders extends BaseEntity<Long> {
     
     @OneToMany(mappedBy="order", cascade=CascadeType.ALL)
     @OrderBy("id, lineNumber")
+    @Singular
     private SortedSet<OrderItem> orderItems; 
     
 }
