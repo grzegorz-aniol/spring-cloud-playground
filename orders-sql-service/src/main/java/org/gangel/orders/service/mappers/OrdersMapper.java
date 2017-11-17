@@ -36,4 +36,15 @@ public abstract class OrdersMapper extends AbstractMapper<Orders, OrdersTO, Long
         }
     }
 
+    @Override
+    public Long getIdentifier(OrdersTO dto) {
+        return dto.getId();
+    }
+
+    @Override
+    public void setIdentifier(OrdersTO dto, Long id) {
+        dto.setId(id);
+    }
+    
+    
 }

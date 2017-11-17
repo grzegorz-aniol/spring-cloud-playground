@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface EntityMapper<E extends AbstractEntity<? extends Serializable>, T extends DTO<? extends Serializable>> {
+public interface EntityMapper<E extends AbstractEntity<? extends Serializable>, T> {
 
     T toDTO(E source);
     

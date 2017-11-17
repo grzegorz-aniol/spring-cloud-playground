@@ -1,22 +1,19 @@
 package org.gangel.orders.grpc.mappers;
 
 import lombok.val;
-import org.gangel.orders.grpc.mappers.OrdersMapper.BuilderFactory;
 import org.gangel.orders.proto.Orders;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(uses={ BuilderFactory.class, CustomerMapper.class, OrderItemMapper.class }, 
+@Mapper(uses={ CustomerMapper.class, OrderItemMapper.class }, 
         config=MappingConfiguration.class)
-public abstract class OrdersMapper {
+public abstract class OrdersMapper extends AbstractGrpcMapper<org.gangel.orders.entity.Orders, Orders, Orders.Builder, Long>{
 
-    public static OrdersMapper INSTANCE = Mappers.getMapper(OrdersMapper.class);
-    
     @Autowired
     private OrderItemMapper orderItemMapper;
 
@@ -24,27 +21,33 @@ public abstract class OrdersMapper {
         @Mapping(target="customer.id", source="customerId"),
         @Mapping(target="orderItems", source="orderItemList")
     })
-    public abstract org.gangel.orders.entity.Orders map(Orders orders);
+    @Override
+    public abstract org.gangel.orders.entity.Orders toEntity(Orders orders);
     
     @Mappings({
         @Mapping(target="customerId", source="customer.id"),
     })    
-    public abstract Orders.Builder map( org.gangel.orders.entity.Orders ordersEntity );
+    @Override
+    public abstract Orders.Builder toProto( org.gangel.orders.entity.Orders ordersEntity );
     
     @AfterMapping
     public void mapOrderItems(@MappingTarget Orders.Builder builder, org.gangel.orders.entity.Orders ordersEntity ) {
         if (ordersEntity != null && builder != null && ordersEntity.getOrderItems()!=null) {
             ordersEntity.getOrderItems().stream()
             .forEach((i) -> {
-                val v = orderItemMapper.map(i);
+                val v = orderItemMapper.toProto(i);
                 builder.addOrderItem(v != null ? v.build() : null); 
             });   
         }
     }
-
-    public static class  BuilderFactory {
-        Orders.Builder builder() {
-            return Orders.newBuilder();
-        }
+    
+    @Override
+    public Long getIdentifier(Orders dto) {
+        return dto.getId();
+    }
+        
+    @ObjectFactory
+    public Orders.Builder getBuilder() {
+        return Orders.newBuilder();
     }
 }

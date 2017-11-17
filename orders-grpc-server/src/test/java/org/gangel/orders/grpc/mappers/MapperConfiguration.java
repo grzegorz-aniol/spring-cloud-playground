@@ -1,5 +1,6 @@
 package org.gangel.orders.grpc.mappers;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,41 +9,22 @@ public class MapperConfiguration {
 
     @Bean
     public CustomerMapper customerMapper() {
-        return CustomerMapper.INSTANCE;
-    }
-    
-    @Bean
-    public CustomerMapper.BuilderFactory customerMapperBuilderFactory() {
-        return new CustomerMapper.BuilderFactory();
+        return Mappers.getMapper(CustomerMapper.class);
     }
     
     @Bean
     public ProductMapper productMapper() {
-        return ProductMapper.INSTANCE;
-    }
-    
-    @Bean
-    public ProductMapper.BuilderFactory productMapperBuilderFactory() {
-        return new ProductMapper.BuilderFactory();
+        return Mappers.getMapper(ProductMapper.class);
     }
     
     @Bean
     public OrdersMapper ordersMapper(){
-        return OrdersMapper.INSTANCE;
-    }
-    
-    @Bean
-    public OrdersMapper.BuilderFactory ordersMapperBuilderFactory() {
-        return new OrdersMapper.BuilderFactory();
+        return Mappers.getMapper(OrdersMapper.class);
     }
     
     @Bean
     public OrderItemMapper orderItemMapper() {
-        return OrderItemMapper.INSTANCE;
+        return Mappers.getMapper(OrderItemMapper.class);
     }
     
-    @Bean
-    public OrderItemMapper.BuilderFactory orderItemMapperBuilderFactory() {
-        return new OrderItemMapper.BuilderFactory();
-    }
 }

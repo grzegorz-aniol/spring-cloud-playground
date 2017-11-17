@@ -16,4 +16,14 @@ public abstract class CustomerMapper extends AbstractMapper<Customer, CustomerTO
 
     public abstract Customer toEntity(CustomerTO source);
     
+    @Override
+    public Long getIdentifier(CustomerTO dto) {
+        return dto.getId();
+    }
+
+    @Override
+    public void setIdentifier(CustomerTO dto, Long id) {
+        dto.setId(id);
+    }
+    
 } 

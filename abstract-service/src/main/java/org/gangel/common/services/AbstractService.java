@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 import javax.persistence.EntityNotFoundException;
 
-public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DTO<ID>, ID extends Serializable> 
+public abstract class AbstractService<E extends AbstractEntity<ID>, T, ID extends Serializable> 
     implements ServiceListener<E, ID>
     {
 
@@ -57,7 +57,7 @@ public abstract class AbstractService<E extends AbstractEntity<ID>, T extends DT
         if (dto == null) {
             return; 
         }
-        dto.setId(id);      
+        getMapper().setIdentifier(dto, id);     
         beforeUpdate(getRepo().findOne(id));
         E entity = getMapper().toEntity(dto);
         if (entity == null) {

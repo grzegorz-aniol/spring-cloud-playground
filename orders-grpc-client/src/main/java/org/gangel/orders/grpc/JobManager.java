@@ -1,6 +1,7 @@
 package org.gangel.orders.grpc;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,10 +13,10 @@ import java.util.stream.Stream;
 
 public class JobManager implements Runnable {
 
-    private Supplier<RequestTask> requestTaskSupplier;
+    private Supplier<? extends Callable<Long>> requestTaskSupplier;
     private JobType jobType;
 
-    public JobManager(JobType jobType, Supplier<RequestTask> requestTaskSupplier) {
+    public JobManager(JobType jobType, Supplier<? extends Callable<Long>> requestTaskSupplier) {
         this.jobType = jobType;
         this.requestTaskSupplier = requestTaskSupplier;
     }

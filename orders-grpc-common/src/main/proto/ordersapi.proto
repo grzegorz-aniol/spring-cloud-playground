@@ -8,13 +8,18 @@ option java_multiple_files = true;
 option java_package = "org.gangel.orders.proto";
 option java_outer_classname = "OrdersProto";
 
-service OrdersService {
+service CustomerService {
 	rpc CreateNewCustomer(NewCustomerRequest) returns (NewCustomerResponse) {}
 	rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {}
+}
 
+service ProductService {
 	rpc CreateNewProduct(NewProductRequest) returns (NewProductResponse) {}
 	rpc GetProduct(GetProductRequest) returns (GetProductResponse) {}
 	
+}
+
+service OrdersService {
 	rpc AddNewOrder(NewOrderRequest) returns (NewOrderResponse) {}
 	rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {}
 

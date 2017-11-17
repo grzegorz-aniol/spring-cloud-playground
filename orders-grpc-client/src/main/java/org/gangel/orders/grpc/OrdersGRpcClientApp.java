@@ -7,9 +7,10 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.gangel.orders.common.GlobalExceptionHandler;
-import org.gangel.orders.grpc.executors.NewCustomerRequestExecutor;
+import org.gangel.orders.grpc.executors.CustomerServiceExecutor;
 import org.gangel.orders.grpc.executors.PingRequestExecutor;
 
+import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 public class OrdersGRpcClientApp {
@@ -89,10 +90,10 @@ public class OrdersGRpcClientApp {
 
             @Override
             public JobManager visitNewCustomer() {
-                return new JobManager(Configuration.jobType, new Supplier<RequestTask>() {
+                return new JobManager(Configuration.jobType, new Supplier<Callable<Long>>() {
                     @Override
-                    public RequestTask get() {
-                        return new RequestTask(new NewCustomerRequestExecutor());
+                    public Callable<Long> get() {
+                        return CustomerServiceExecutor.getNewCustomerRequestExecutor();
                     }           
                 });
             }

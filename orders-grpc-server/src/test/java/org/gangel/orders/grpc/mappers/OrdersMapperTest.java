@@ -2,47 +2,65 @@ package org.gangel.orders.grpc.mappers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
+import lombok.val;
 import org.gangel.orders.proto.OrderItem;
 import org.gangel.orders.proto.Orders;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
-@RunWith(SpringRunner.class)
+import javax.persistence.EntityManager;
+
+@RunWith(MockitoJUnitRunner.class)
 @Import(value=MapperConfiguration.class)
 public class OrdersMapperTest {
 
+    private static final Long OBJECT_ID = 234L;
+
     @InjectMocks
-    private OrdersMapper ordersMapper = OrdersMapper.INSTANCE;
+    private OrdersMapper ordersMapper = Mappers.getMapper(OrdersMapper.class);
+
+    @Mock
+    private OrderItemMapper orderItemMapper;
     
     @Mock
-    OrdersMapper.BuilderFactory builderFactory;
+    private EntityManager entityManager;    
     
     @Before
     public void onSetUp() {
-        when(builderFactory.builder()).thenReturn(Orders.newBuilder());
+        when(entityManager.find(eq(org.gangel.orders.entity.Orders.class), any(Long.class)))
+            .thenReturn(org.gangel.orders.entity.Orders.builder().id(OBJECT_ID).build());
+        when(orderItemMapper.toEntity(any(OrderItem.class))).thenReturn(new org.gangel.orders.entity.OrderItem());
+        when(orderItemMapper.toProto(any(org.gangel.orders.entity.OrderItem.class))).thenReturn(OrderItem.newBuilder().setId(456L));
+        val ts = new TreeSet<org.gangel.orders.entity.OrderItem>();
+        ts.add(org.gangel.orders.entity.OrderItem.builder().build());
+        when(orderItemMapper.toEntityAsSortedSet(any())).thenReturn(ts);
     }    
     
     @Test
     public void testProtoToEntityMapper() {
         Orders orders = Orders.newBuilder()
-            .setId(101)
+            .setId(OBJECT_ID)
             .setCustomerId(202)
-            .addOrderItem(OrderItem.newBuilder().setAmount(123).setId(1).setProductId(123).setQuantity(2).build())
+            .addOrderItem(OrderItem.newBuilder().setId(1).build())
             .build();
         
-        org.gangel.orders.entity.Orders ordersEntity = ordersMapper.map(orders);
+        org.gangel.orders.entity.Orders ordersEntity = ordersMapper.toEntity(orders);
         
-        assertEquals(new Long(101L), ordersEntity.getId());
+        assertEquals(new Long(OBJECT_ID), ordersEntity.getId());
         
         assertNotNull(ordersEntity.getCustomer());
         assertEquals(new Long(202L), ordersEntity.getCustomer().getId());
@@ -52,17 +70,12 @@ public class OrdersMapperTest {
         assertEquals(1, orderItems.size());
         org.gangel.orders.entity.OrderItem orderItem = orderItems.first();
         assertNotNull(orderItem);
-        assertNotNull(orderItem.getProduct());
-        assertEquals(123.0, orderItem.getAmount(), 1e-5);
-        assertEquals(1L, orderItem.getId().longValue());
-        assertEquals(2, orderItem.getQuantity());
-        
     }
     
     @Test
     public void testEntityToProtoMapper() {
         org.gangel.orders.entity.Orders ordersEntity = org.gangel.orders.entity.Orders.builder()
-            .id(123L)
+            .id(OBJECT_ID)
             .customer(org.gangel.orders.entity.Customer.builder()
                     .id(234L)
                     .email("email@domain.com")
@@ -88,10 +101,10 @@ public class OrdersMapperTest {
                     .build())
             .build();
         
-        Orders orders = ordersMapper.map(ordersEntity).build();
+        Orders orders = ordersMapper.toProto(ordersEntity).build();
         
         assertNotNull(orders);
-        assertEquals(123L, orders.getId());
+        assertEquals(OBJECT_ID.longValue(), orders.getId());
         
         List<OrderItem> orderItemList = orders.getOrderItemList();
         assertNotNull(orderItemList);
@@ -101,7 +114,7 @@ public class OrdersMapperTest {
     @Test
     public void testSimpleEntityToProtoMapper() {
         org.gangel.orders.entity.Orders ordersEntity = org.gangel.orders.entity.Orders.builder()
-            .id(123L)
+            .id(OBJECT_ID)
             .customer(org.gangel.orders.entity.Customer.builder()
                     .id(234L)
                     .email("email@domain.com")
@@ -115,10 +128,10 @@ public class OrdersMapperTest {
                     .build())
             .build();
         
-        Orders orders = ordersMapper.map(ordersEntity).build();
+        Orders orders = ordersMapper.toProto(ordersEntity).build();
         
         assertNotNull(orders);
-        assertEquals(123L, orders.getId());
+        assertEquals(OBJECT_ID.longValue(), orders.getId());
         
         List<OrderItem> orderItemList = orders.getOrderItemList();
         assertNotNull(orderItemList);

@@ -28,4 +28,14 @@ public abstract class OrderItemMapper extends AbstractMapper<OrderItem, OrderIte
     })
     public abstract OrderItem toEntity(OrderItemTO source);
     
+    
+    @Override
+    public Long getIdentifier(OrderItemTO dto) {
+        return dto.getId();
+    }
+
+    @Override
+    public void setIdentifier(OrderItemTO dto, Long id) {
+        dto.setId(id);
+    }    
 }

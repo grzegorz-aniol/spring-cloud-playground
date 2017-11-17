@@ -15,5 +15,14 @@ public abstract class ProductMapper extends AbstractMapper<Product, ProductTO, L
     public abstract ProductTO toDTO(Product source);
 
     public abstract Product toEntity(ProductTO source);
-        
+
+    @Override
+    public Long getIdentifier(ProductTO dto) {
+        return dto.getId();
+    }
+
+    @Override
+    public void setIdentifier(ProductTO dto, Long id) {
+        dto.setId(id);
+    }    
 } 

@@ -33,7 +33,7 @@ class RequestTask implements Callable<Long> {
                 
         final OrdersServiceFutureStub stub = OrdersServiceGrpc.newFutureStub(channel);
         
-        long totalTime = 0;
+        long totalTime = 0;        
         
         for (long i=0; i < Configuration.numOfIterations; ++i) {
             try {

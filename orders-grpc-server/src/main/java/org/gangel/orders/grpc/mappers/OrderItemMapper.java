@@ -1,39 +1,37 @@
 package org.gangel.orders.grpc.mappers;
 
 import lombok.val;
-import org.gangel.orders.grpc.mappers.OrderItemMapper.BuilderFactory;
 import org.gangel.orders.proto.OrderItem;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.ObjectFactory;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-@Mapper(uses={ BuilderFactory.class, CustomerMapper.class }, 
+@Mapper(uses={ CustomerMapper.class }, 
         config=MappingConfiguration.class   )
-public abstract class OrderItemMapper {
+public abstract class OrderItemMapper extends AbstractGrpcMapper<org.gangel.orders.entity.OrderItem, OrderItem, OrderItem.Builder, Long>{
 
-    public static OrderItemMapper INSTANCE = Mappers.getMapper(OrderItemMapper.class);
-
-    
     @Mappings({
         @Mapping(target="product.id", source="productId")
     })
-    public abstract org.gangel.orders.entity.OrderItem map(OrderItem orderItem);
+    @Override
+    public abstract org.gangel.orders.entity.OrderItem toEntity(OrderItem orderItem);
     
     @InheritInverseConfiguration
-    public abstract OrderItem.Builder map( org.gangel.orders.entity.OrderItem ordersEntity );
+    @Override
+    public abstract OrderItem.Builder toProto( org.gangel.orders.entity.OrderItem ordersEntity );
     
     public Collection<org.gangel.orders.entity.OrderItem> map(Collection<OrderItem> source) {
         if (source == null) {
             return null;
         }
-        return source.stream().map((i) -> map(i)).collect(Collectors.toCollection(TreeSet::new));
+        return source.stream().map((i) -> toEntity(i)).collect(Collectors.toCollection(TreeSet::new));
     }
     
     public List<OrderItem> mapEntities(Collection<org.gangel.orders.entity.OrderItem> source) {
@@ -42,16 +40,20 @@ public abstract class OrderItemMapper {
         }
         return source.stream()
                 .map((i) -> {
-                    val v = map(i);
+                    val v = toProto(i);
                     if (v==null) return null;
                     return v.build(); 
                 })
                 .collect(Collectors.toList());
     }    
   
-    public static class  BuilderFactory {
-        OrderItem.Builder builder() {
-            return OrderItem.newBuilder();
-        }
+    @Override
+    public Long getIdentifier(OrderItem dto) {
+        return dto.getId();
+    }
+        
+    @ObjectFactory
+    public OrderItem.Builder getBuilder() {
+        return OrderItem.newBuilder();
     }
 }
