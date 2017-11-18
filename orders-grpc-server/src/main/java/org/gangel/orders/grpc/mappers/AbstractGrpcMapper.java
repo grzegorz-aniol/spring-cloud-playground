@@ -5,8 +5,13 @@ import lombok.SneakyThrows;
 import org.gangel.common.services.AbstractEntity;
 import org.mapstruct.ObjectFactory;
 import org.mapstruct.TargetType;
+import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -58,4 +63,47 @@ public abstract class AbstractGrpcMapper<E extends AbstractEntity<ID>,
         return entity;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<T> toProto(List<E> entityList) {
+        if (entityList == null) {
+            return null;
+        }
+        return entityList.stream()
+                .map( d -> (T)toProto(d).build() )
+                .collect(Collectors.toList());       
+    }
+    
+    @SuppressWarnings("unchecked")
+    private T safeToProto(E entity) {
+        if (entity == null) {
+            return null;
+        }
+        T.Builder b = toProto(entity);
+        if (b == null) {
+            return null;
+        }
+        return (T)b.build();
+    }
+
+    public Page<T> toDTO(Page<E> entitiesPage) {
+        if (entitiesPage == null) {
+            return null;
+        }
+        return entitiesPage.map(this::safeToProto);      
+    }
+
+    public List<E> toEntity(List<T> transferList) {
+        if (transferList == null) {
+            return null;
+        }
+        return transferList.stream().map(r->toEntity(r)).collect(Collectors.toList());       
+    }    
+
+    public SortedSet<E> toEntityAsSortedSet(List<T> transferList) {
+        if (transferList == null) {
+            return null;
+        }
+        return transferList.stream().map(r->toEntity(r)).collect(Collectors.toCollection(TreeSet::new));       
+    }    
+    
 }

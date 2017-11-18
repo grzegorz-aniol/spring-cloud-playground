@@ -1,7 +1,7 @@
 package org.gangel.orders.service;
 
-import org.gangel.common.services.AbstractMapper;
 import org.gangel.common.services.AbstractService;
+import org.gangel.common.services.EntityMapper;
 import org.gangel.orders.dto.ProductTO;
 import org.gangel.orders.entity.Product;
 import org.gangel.orders.repository.ProductRepository;
@@ -25,7 +25,7 @@ public class ProductService extends AbstractService<Product, ProductTO, Long> {
     }
 
     @Override
-    protected AbstractMapper<Product, ProductTO, Long> getMapper() {
+    protected EntityMapper<E, T> getMapper() {
         return mapper;
     }
 

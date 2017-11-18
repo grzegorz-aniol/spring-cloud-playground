@@ -2,12 +2,11 @@ package org.gangel.orders.grpc.mappers;
 
 import com.google.protobuf.Message;
 import org.gangel.common.services.AbstractEntity;
+import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * Interface for mapping between Hibernate's entity and Google Protobuf object.
@@ -18,42 +17,20 @@ import java.util.stream.Collectors;
  *
  * @param <E> Hibernate's entity. In fact an entity that implements @See AbstractEntity interface
  * @param <T> Protobuf object. It implements @See Message interface. 
+ * @param <TB> Protobuf builder. It's required due to protobuf object are immutable and they're created only via builder
  */
-public interface GrpcEntityMapper<E extends AbstractEntity<? extends Serializable>, T extends Message, B extends Message.Builder> {
+public interface GrpcEntityMapper<E extends AbstractEntity<? extends Serializable>, T extends Message, TB extends Message.Builder> {
 
-    B toProto(E source);
+    TB toProto(E source);
     
     E toEntity(T source);
     
-    @SuppressWarnings("unchecked")
-    default List<T> toProto(List<E> entityList) {
-        if (entityList == null) {
-            return null;
-        }
-        return entityList.stream()
-                .map( d -> (T)toProto(d).build() )
-                .collect(Collectors.toList());       
-    }
-//
-//    default Page<T> toDTO(Page<E> entitiesPage) {
-//        if (entitiesPage == null) {
-//            return null;
-//        }
-//        return entitiesPage.map((c) -> toDTO(c));      
-//    }
+    List<T> toProto(List<E> entityList);
 
-    default List<E> toEntity(List<T> transferList) {
-        if (transferList == null) {
-            return null;
-        }
-        return transferList.stream().map(r->toEntity(r)).collect(Collectors.toList());       
-    }    
+    Page<T> toDTO(Page<E> entitiesPage);
 
-    default SortedSet<E> toEntityAsSortedSet(List<T> transferList) {
-        if (transferList == null) {
-            return null;
-        }
-        return transferList.stream().map(r->toEntity(r)).collect(Collectors.toCollection(TreeSet::new));       
-    }    
+    List<E> toEntity(List<T> transferList);
+
+    SortedSet<E> toEntityAsSortedSet(List<T> transferList);
     
 }
