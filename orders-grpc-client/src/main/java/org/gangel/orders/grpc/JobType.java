@@ -5,12 +5,10 @@ import lombok.Getter;
 public enum JobType  {
 
     UNKNOWN("Unknown") {
-
         @Override
         public <T> T accept(Visitor<T> visitor) {
             return visitor.visitUnknown();
         }
-        
     },
     
     PING("Ping") {
@@ -24,6 +22,41 @@ public enum JobType  {
         @Override
         public <T> T accept(Visitor<T> visitor) {
             return visitor.visitNewCustomer();
+        }
+    },
+    
+    GETCUSTOMER("Get customer") {
+        @Override
+        public <T> T accept(Visitor<T> visitor) {
+            return visitor.visitGetCustomer();
+        }
+    },
+    
+    NEWPRODUCT("New product") {
+        @Override
+        public <T> T accept(Visitor<T> visitor) {
+            return visitor.visitNewProduct();
+        }
+    },
+    
+    GETPRODUCT("Get product") {
+        @Override
+        public <T> T accept(Visitor<T> visitor) {
+            return visitor.visitGetProduct();
+        }
+    }, 
+    
+    NEWORDERS("New orders") {
+        @Override
+        public <T> T accept(Visitor<T> visitor) {
+            return visitor.visitNewOrders();
+        }
+    },
+    
+    GETORDERS("Get orders") {
+        @Override
+        public <T> T accept(Visitor<T> visitor) {
+            return visitor.visitGetOrders();
         }
     }
     ;
@@ -40,6 +73,11 @@ public enum JobType  {
     interface Visitor<T> {
         T visitPing();
         T visitNewCustomer();
+        T visitGetCustomer();
+        T visitNewProduct();
+        T visitGetProduct();
+        T visitNewOrders();
+        T visitGetOrders();
         T visitUnknown();
     }
     

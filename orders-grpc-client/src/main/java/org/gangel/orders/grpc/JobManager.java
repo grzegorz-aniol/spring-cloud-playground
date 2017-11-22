@@ -1,5 +1,7 @@
 package org.gangel.orders.grpc;
 
+import org.gangel.orders.grpc.common.Histogram;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -13,10 +15,10 @@ import java.util.stream.Stream;
 
 public class JobManager implements Runnable {
 
-    private Supplier<? extends Callable<Long>> requestTaskSupplier;
+    private Supplier<? extends Callable<Histogram>> requestTaskSupplier;
     private JobType jobType;
 
-    public JobManager(JobType jobType, Supplier<? extends Callable<Long>> requestTaskSupplier) {
+    public JobManager(JobType jobType, Supplier<? extends Callable<Histogram>> requestTaskSupplier) {
         this.jobType = jobType;
         this.requestTaskSupplier = requestTaskSupplier;
     }
@@ -27,7 +29,7 @@ public class JobManager implements Runnable {
         System.out.println("Waiting for termination...");
         
         ExecutorService executor = Executors.newFixedThreadPool(Configuration.numOfThreads);
-        List<Future<Long>> futures = null;
+        List<Future<Histogram>> futures = null;
         long t0 = System.currentTimeMillis();
         try {
             futures = executor.invokeAll(
@@ -42,27 +44,33 @@ public class JobManager implements Runnable {
         }
         
         executor.shutdown();
-        long executionTime = System.currentTimeMillis() - t0;
+        long executionTime = System.currentTimeMillis() - t0;        
         
-        long totalDuraionTime = 0;
+        List<Histogram> histograms;
+        histograms = futures.stream().map(v -> {
+            try {
+                return v.get();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
+        
+        Histogram.Statistics stats = Histogram.getStats(histograms);
+        long totalDuraionTime = stats.totalTime.toMillis();
         long totalRequestsCount = (Configuration.numOfIterations * Configuration.numOfThreads);
         
-        for (int i=0; i < futures.size(); ++i) {
-            try {
-                totalDuraionTime += futures.get(i).get();
-            } catch (InterruptedException | ExecutionException e) {
-                System.err.println(e.getMessage());
-                e.printStackTrace();
-                return;
-            }
-        }
-
+        System.out.print(String.format("Job = %s;", jobType.toString()));
+        System.out.print(stats.toString());
+        System.out.print(String.format("Execution time = %.3f sec; IOPS = %.0f; avg response = %.2f ms;", 
+                1e-3*executionTime, totalRequestsCount/(1e-3*executionTime), (double)totalDuraionTime/totalRequestsCount));
         System.out.print(String.format("Threads = %d;", Configuration.numOfThreads));
         System.out.print(String.format("Iterations per thread = %d;", Configuration.numOfIterations));
         System.out.print(String.format("Total requests sent = %d;", totalRequestsCount));
-        System.out.print(String.format("Execution time = %.3f sec; IOPS = %.0f; avg response = %.2f ms", 
-                1e-3*executionTime, totalRequestsCount/(1e-3*executionTime), (double)totalDuraionTime/totalRequestsCount));
         System.out.println();
         System.out.println(String.format("Done."));
-    }    
+    }
+    
+    public static JobManager getJobManagerForJobType(JobType type) {
+        return Configuration.jobType.accept(new JobManagerJobVisitor());
+    }
 }

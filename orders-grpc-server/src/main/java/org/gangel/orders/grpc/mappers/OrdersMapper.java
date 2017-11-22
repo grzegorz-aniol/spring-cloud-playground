@@ -16,6 +16,9 @@ public abstract class OrdersMapper extends AbstractGrpcMapper<org.gangel.orders.
 
     @Autowired
     private OrderItemMapper orderItemMapper;
+    
+    @Autowired
+    private CustomerMapper customerMapper;
 
     @Mappings({
         @Mapping(target="customer.id", source="customerId"),
@@ -25,7 +28,7 @@ public abstract class OrdersMapper extends AbstractGrpcMapper<org.gangel.orders.
     public abstract org.gangel.orders.entity.Orders toEntity(Orders orders);
     
     @Mappings({
-        @Mapping(target="customerId", source="customer.id"),
+        @Mapping(target="customerId", ignore=true),
     })    
     @Override
     public abstract Orders.Builder toProto( org.gangel.orders.entity.Orders ordersEntity );
@@ -41,6 +44,14 @@ public abstract class OrdersMapper extends AbstractGrpcMapper<org.gangel.orders.
         }
     }
     
+    @AfterMapping
+    public void mapOrderItems(@MappingTarget org.gangel.orders.entity.Orders ordersEntity, Orders orders) {
+        if (orders!=null && ordersEntity!=null) {
+            ordersEntity.setCustomer(customerMapper.fetchObject(orders.getCustomerId(), org.gangel.orders.entity.Customer.class));
+            ordersEntity.getOrderItems().stream().forEach(i -> i.setOrder(ordersEntity));
+        }
+    }
+
     @Override
     public Long getIdentifier(Orders dto) {
         return dto.getId();

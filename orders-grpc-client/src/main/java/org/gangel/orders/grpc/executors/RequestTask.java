@@ -1,10 +1,12 @@
-package org.gangel.orders.grpc;
+package org.gangel.orders.grpc.executors;
 
 import com.google.protobuf.GeneratedMessageV3;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
-import org.gangel.orders.common.GlobalExceptionHandler;
+import org.gangel.orders.grpc.Configuration;
+import org.gangel.orders.grpc.common.GlobalExceptionHandler;
+import org.gangel.orders.grpc.common.Histogram;
 import org.gangel.orders.proto.OrdersServiceGrpc;
 import org.gangel.orders.proto.OrdersServiceGrpc.OrdersServiceFutureStub;
 
@@ -13,7 +15,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-class RequestTask implements Callable<Long> {
+class RequestTask implements Callable<Histogram> {
     
     private Function<OrdersServiceFutureStub, ? extends com.google.protobuf.GeneratedMessageV3> requestExecutor; 
 
@@ -22,8 +24,9 @@ class RequestTask implements Callable<Long> {
     }
     
     @Override
-    public Long call() throws Exception {
+    public Histogram call() throws Exception {
         GlobalExceptionHandler.register();
+        Histogram histogram = new Histogram(Configuration.numOfIterations);
 
         final ManagedChannel channel = NettyChannelBuilder.forAddress(Configuration.host, Configuration.port)
                     .sslContext(GrpcSslContexts.forClient()
@@ -33,27 +36,26 @@ class RequestTask implements Callable<Long> {
                 
         final OrdersServiceFutureStub stub = OrdersServiceGrpc.newFutureStub(channel);
         
-        long totalTime = 0;        
-        
         for (long i=0; i < Configuration.numOfIterations; ++i) {
             try {
-                long t0 = System.currentTimeMillis();
+                long t0 = System.nanoTime();
                 GeneratedMessageV3 response = requestExecutor.apply(stub);
-                totalTime += (System.currentTimeMillis() - t0);
+                long time = (System.nanoTime() - t0);
                 if (response == null) {
                     throw new RuntimeException("Wrong response: null object");
                 }
+                histogram.put(time);
             } catch (Throwable e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
-                return 0L; 
+                return null; 
             }
         }
         
         channel.shutdown();
         channel.awaitTermination(5, TimeUnit.SECONDS);
         
-        return totalTime;
+        return histogram;
     }
     
 }

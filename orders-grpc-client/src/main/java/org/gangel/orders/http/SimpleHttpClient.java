@@ -1,5 +1,6 @@
 package org.gangel.orders.http;
 
+import lombok.Getter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -13,7 +14,12 @@ import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.gangel.orders.grpc.Configuration;
+import org.gangel.orders.grpc.common.Histogram;
+import org.gangel.orders.grpc.common.Histogram.Statistics;
 
+import java.io.ByteArrayOutputStream;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -31,13 +37,18 @@ public class SimpleHttpClient {
     private static String host = "localhost";
     private static int port = 8001;
 
-    private static class Task implements Callable<Long> {
+    private static class Task implements Callable<Histogram> {
 
         public Task() {}
+        
+        @Getter
+        private Histogram histogram; 
 
         @Override
-        public Long call() throws Exception {
+        public Histogram call() throws Exception {
 
+            histogram = new Histogram(numOfIterations, ChronoUnit.NANOS);
+            
             PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
             cm.setMaxTotal(numOfIterations);
             cm.setDefaultMaxPerRoute(numOfIterations);
@@ -45,22 +56,30 @@ public class SimpleHttpClient {
             cm.setMaxPerRoute(new HttpRoute(localhost), numOfIterations);
 
             CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
-            HttpGet getRequest = new HttpGet("http://" + host + ":" + port +"/");
-
-            long totalTime = 0;
 
             for (long i = 0; i < numOfIterations; ++i) {
-                long t0 = System.currentTimeMillis();
+                HttpGet getRequest = new HttpGet("http://" + host + ":" + port +"/");
+                //getRequest.setHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_KEEP_ALIVE);
+//                getRequest.setHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_CLOSE);
+
+                long t0 = System.nanoTime();
                 CloseableHttpResponse response = httpClient.execute(getRequest);
-                totalTime += System.currentTimeMillis() - t0;
                 
                 int code = response.getStatusLine().getStatusCode();
                 if (code != HttpStatus.SC_OK) {
                     throw new RuntimeException("Error code: " + code);
                 }
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                response.getEntity().writeTo(output);
+                response.close();
+                
+                long time = System.nanoTime() - t0;
+                histogram.put(time);
             }
 
-            return totalTime;
+            httpClient.close();
+            
+            return histogram;
 
         }
 
@@ -81,7 +100,7 @@ public class SimpleHttpClient {
         System.out.println("Waiting for termination...");
 
         ExecutorService executor = Executors.newFixedThreadPool(numOfThreads);
-        List<Future<Long>> futures = null;
+        List<Future<Histogram>> futures = null;
         long t0 = System.currentTimeMillis();
         try {
             futures = executor.invokeAll(
@@ -95,25 +114,28 @@ public class SimpleHttpClient {
         executor.shutdown();
         long executionTime = System.currentTimeMillis() - t0;
 
-        long totalDuraionTime = 0;
-        long totalRequestsCount = (numOfIterations * numOfThreads);
-
-        for (int i = 0; i < futures.size(); ++i) {
+        List<Histogram> histograms = futures.stream().map(v->{
             try {
-                totalDuraionTime += futures.get(i).get();
+                return v.get();
             } catch (InterruptedException | ExecutionException e) {
-                System.err.println(e.getMessage());
-                return;
+                throw new RuntimeException(e);
             }
-        }
-
-        System.out.println(String.format("Total requests sent = %d", totalRequestsCount));
-        System.out.println(
-                String.format("Execution time = %.3f sec; IOPS = %.0f; avg response = %.2f ms",
+        }).collect(Collectors.toList());
+        
+        long totalRequestsCount = (numOfIterations * numOfThreads);
+        
+        Statistics stats = Histogram.getStats(histograms);
+        System.out.print(stats.toString());
+        long totalDuraionTime = stats.totalTime.toMillis();
+        System.out.print(String.format("Total requests sent = %d;", totalRequestsCount));
+        System.out.print(
+                String.format("Execution time = %.3f sec; IOPS = %.0f; avg response = %.2f ms;",
                         1e-3 * executionTime, totalRequestsCount / (1e-3 * executionTime),
                         (double) totalDuraionTime / totalRequestsCount));
-
-        System.out.println(String.format("Done."));
+        System.out.print(String.format("Threads = %d;", Configuration.numOfThreads));
+        System.out.print(String.format("Iterations per thread = %d;", Configuration.numOfIterations));
+        
+        System.out.println(String.format("\nDone."));
 
     }
 

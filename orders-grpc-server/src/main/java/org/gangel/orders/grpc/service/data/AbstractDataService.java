@@ -1,4 +1,4 @@
-package org.gangel.orders.grpc.service;
+package org.gangel.orders.grpc.service.data;
 
 import com.google.protobuf.Message;
 import org.gangel.common.services.AbstractEntity;

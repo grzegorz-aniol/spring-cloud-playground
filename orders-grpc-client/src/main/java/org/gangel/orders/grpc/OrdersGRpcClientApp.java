@@ -1,17 +1,11 @@
 package org.gangel.orders.grpc;
 
-import lombok.NonNull;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.gangel.orders.common.GlobalExceptionHandler;
-import org.gangel.orders.grpc.executors.CustomerServiceExecutor;
-import org.gangel.orders.grpc.executors.PingRequestExecutor;
-
-import java.util.concurrent.Callable;
-import java.util.function.Supplier;
+import org.gangel.orders.grpc.common.GlobalExceptionHandler;
 
 public class OrdersGRpcClientApp {
 
@@ -76,35 +70,7 @@ public class OrdersGRpcClientApp {
             return; 
         }
         
-        JobManager mgr = Configuration.jobType.accept(new JobType.Visitor<JobManager>() {
-
-            @Override
-            public JobManager visitPing() {
-                return new JobManager( Configuration.jobType, new Supplier<RequestTask>() {
-                    @Override
-                    public RequestTask get() {
-                        return new RequestTask(new PingRequestExecutor());
-                    }           
-                });
-            }
-
-            @Override
-            public JobManager visitNewCustomer() {
-                return new JobManager(Configuration.jobType, new Supplier<Callable<Long>>() {
-                    @Override
-                    public Callable<Long> get() {
-                        return CustomerServiceExecutor.getNewCustomerRequestExecutor();
-                    }           
-                });
-            }
-
-            @Override
-            @NonNull
-            public JobManager visitUnknown() {
-                return null;
-            }
-            
-        });
+        JobManager mgr = JobManager.getJobManagerForJobType(Configuration.jobType);
         
         mgr.run();
         

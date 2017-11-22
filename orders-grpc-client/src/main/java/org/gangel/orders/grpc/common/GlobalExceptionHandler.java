@@ -1,4 +1,4 @@
-package org.gangel.orders.common;
+package org.gangel.orders.grpc.common;
 
 public class GlobalExceptionHandler implements Thread.UncaughtExceptionHandler {
 

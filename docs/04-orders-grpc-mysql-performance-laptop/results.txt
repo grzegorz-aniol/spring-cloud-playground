@@ -1,0 +1,4 @@
+Job = NEWCUSTOMER;Threads = 1;Iterations per thread = 10000;Total requests sent = 10000;Execution time = 109,190 sec; IOPS = 92; avg response = 10,83 ms
+Job = GETCUSTOMER;Threads = 1;Iterations per thread = 10000;Total requests sent = 10000;Execution time = 78,020 sec; IOPS = 128; avg response = 7,71 ms
+
+Job = NEWPRODUCT;Threads = 1;Iterations per thread = 10000;Total requests sent = 10000;Execution time = 102,639 sec; IOPS = 97; avg response = 10,18 ms

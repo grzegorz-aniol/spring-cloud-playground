@@ -7,6 +7,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import lombok.val;
+import org.gangel.orders.proto.Customer;
 import org.gangel.orders.proto.OrderItem;
 import org.gangel.orders.proto.Orders;
 import org.junit.Before;
@@ -35,6 +36,9 @@ public class OrdersMapperTest {
 
     @Mock
     private OrderItemMapper orderItemMapper;
+
+    @Mock
+    private CustomerMapper customerMapper;
     
     @Mock
     private EntityManager entityManager;    
@@ -42,9 +46,21 @@ public class OrdersMapperTest {
     @Before
     public void onSetUp() {
         when(entityManager.find(eq(org.gangel.orders.entity.Orders.class), any(Long.class)))
-            .thenReturn(org.gangel.orders.entity.Orders.builder().id(OBJECT_ID).build());
+            .thenReturn(org.gangel.orders.entity.Orders.builder()
+                        .id(OBJECT_ID)
+                        .build());
+        when(entityManager.find(eq(org.gangel.orders.entity.Customer.class), any(Long.class)))
+            .thenReturn(org.gangel.orders.entity.Customer.builder().id(202L).build());
+        
+        when(customerMapper.fetchObject(any(Long.class), eq(org.gangel.orders.entity.Customer.class)))
+            .thenReturn(org.gangel.orders.entity.Customer.builder().id(202L).build());
+        
         when(orderItemMapper.toEntity(any(OrderItem.class))).thenReturn(new org.gangel.orders.entity.OrderItem());
         when(orderItemMapper.toProto(any(org.gangel.orders.entity.OrderItem.class))).thenReturn(OrderItem.newBuilder().setId(456L));
+        
+        when(customerMapper.toEntity(any(Customer.class))).thenReturn(new org.gangel.orders.entity.Customer());
+        when(customerMapper.toProto(any(org.gangel.orders.entity.Customer.class))).thenReturn(Customer.newBuilder().setId(202L));
+        
         val ts = new TreeSet<org.gangel.orders.entity.OrderItem>();
         ts.add(org.gangel.orders.entity.OrderItem.builder().build());
         when(orderItemMapper.toEntityAsSortedSet(any())).thenReturn(ts);
