@@ -15,6 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.gangel.orders.grpc.Configuration;
+import org.gangel.orders.grpc.common.GCStats;
 import org.gangel.orders.grpc.common.Histogram;
 import org.gangel.orders.grpc.common.Histogram.Statistics;
 
@@ -32,11 +33,6 @@ import java.util.stream.Stream;
 
 public class SimpleHttpClient {
 
-    private static int numOfIterations = 1000;
-    private static int numOfThreads = 1;
-    private static String host = "localhost";
-    private static int port = 8001;
-
     private static class Task implements Callable<Histogram> {
 
         public Task() {}
@@ -47,18 +43,18 @@ public class SimpleHttpClient {
         @Override
         public Histogram call() throws Exception {
 
-            histogram = new Histogram(numOfIterations, ChronoUnit.NANOS);
+            histogram = new Histogram(Configuration.numOfIterations, ChronoUnit.NANOS);
             
             PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
-            cm.setMaxTotal(numOfIterations);
-            cm.setDefaultMaxPerRoute(numOfIterations);
-            HttpHost localhost = new HttpHost(host, port);
-            cm.setMaxPerRoute(new HttpRoute(localhost), numOfIterations);
+            cm.setMaxTotal(Configuration.numOfIterations);
+            cm.setDefaultMaxPerRoute(Configuration.numOfIterations);
+            HttpHost localhost = new HttpHost(Configuration.host, Configuration.port);
+            cm.setMaxPerRoute(new HttpRoute(localhost), Configuration.numOfIterations);
 
             CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
 
-            for (long i = 0; i < numOfIterations; ++i) {
-                HttpGet getRequest = new HttpGet("http://" + host + ":" + port +"/");
+            for (long i = 0; i < Configuration.numOfIterations; ++i) {
+                HttpGet getRequest = new HttpGet("http://" + Configuration.host + ":" + Configuration.port +"/");
                 //getRequest.setHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_KEEP_ALIVE);
 //                getRequest.setHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_CLOSE);
 
@@ -95,16 +91,16 @@ public class SimpleHttpClient {
             return; 
         }        
         
-        System.out.println("Starting " + numOfThreads + " threads...");
+        System.out.println("Starting " + Configuration.numOfThreads + " threads...");
 
         System.out.println("Waiting for termination...");
 
-        ExecutorService executor = Executors.newFixedThreadPool(numOfThreads);
+        ExecutorService executor = Executors.newFixedThreadPool(Configuration.numOfThreads);
         List<Future<Histogram>> futures = null;
         long t0 = System.currentTimeMillis();
         try {
             futures = executor.invokeAll(
-                    Stream.generate(() -> new Task()).limit(numOfThreads).collect(Collectors.toList()),
+                    Stream.generate(() -> new Task()).limit(Configuration.numOfThreads).collect(Collectors.toList()),
                     300, TimeUnit.SECONDS);
         } catch (InterruptedException e1) {
             System.err.println(e1.getMessage());
@@ -112,7 +108,6 @@ public class SimpleHttpClient {
         }
 
         executor.shutdown();
-        long executionTime = System.currentTimeMillis() - t0;
 
         List<Histogram> histograms = futures.stream().map(v->{
             try {
@@ -122,8 +117,10 @@ public class SimpleHttpClient {
             }
         }).collect(Collectors.toList());
         
-        long totalRequestsCount = (numOfIterations * numOfThreads);
+        long executionTime = System.currentTimeMillis() - t0;
+        long totalRequestsCount = (Configuration.numOfIterations * Configuration.numOfThreads);
         
+        System.out.print("Job = PING;");
         Statistics stats = Histogram.getStats(histograms);
         System.out.print(stats.toString());
         long totalDuraionTime = stats.totalTime.toMillis();
@@ -134,6 +131,7 @@ public class SimpleHttpClient {
                         (double) totalDuraionTime / totalRequestsCount));
         System.out.print(String.format("Threads = %d;", Configuration.numOfThreads));
         System.out.print(String.format("Iterations per thread = %d;", Configuration.numOfIterations));
+        GCStats.printGCStats();
         
         System.out.println(String.format("\nDone."));
 
@@ -150,25 +148,25 @@ public class SimpleHttpClient {
         CommandLine cmd = parser.parse(options, args);
         
         int value = Integer.parseInt(cmd.getOptionValue("t"));
-        if (value < 1) {            
-            numOfThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+        if (value < 1) {
+            Configuration.numOfThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         } else {
-            numOfThreads = value; 
+            Configuration.numOfThreads = value; 
         }
         
         String iterationValue = cmd.getOptionValue("i");
         if (iterationValue != null) {
-            numOfIterations = Math.max(1, Integer.parseUnsignedInt(iterationValue));
+            Configuration.numOfIterations = Math.max(1, Integer.parseUnsignedInt(iterationValue));
         }
         
         String hostValue = cmd.getOptionValue("h");
         if (hostValue!=null) {
-            host = hostValue;
+            Configuration.host = hostValue;
         }
         
         String portValue = cmd.getOptionValue("p");
         if (portValue != null) {
-            port = Math.max(1, Integer.parseUnsignedInt(portValue)); 
+            Configuration.port = Math.max(1, Integer.parseUnsignedInt(portValue)); 
         }
     }
 }

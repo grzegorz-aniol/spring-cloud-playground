@@ -1,5 +1,6 @@
 package org.gangel.orders.grpc;
 
+import org.gangel.orders.grpc.common.GCStats;
 import org.gangel.orders.grpc.common.Histogram;
 
 import java.util.List;
@@ -66,6 +67,7 @@ public class JobManager implements Runnable {
         System.out.print(String.format("Threads = %d;", Configuration.numOfThreads));
         System.out.print(String.format("Iterations per thread = %d;", Configuration.numOfIterations));
         System.out.print(String.format("Total requests sent = %d;", totalRequestsCount));
+        GCStats.printGCStats();
         System.out.println();
         System.out.println(String.format("Done."));
     }

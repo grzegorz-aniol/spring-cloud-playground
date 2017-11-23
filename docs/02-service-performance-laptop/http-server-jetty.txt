@@ -2,3 +2,6 @@ Execution time = 1,519 sec; IOPS = 99; avg response = 9,66 ms
 Execution time = 4,697 sec; IOPS = 319; avg response = 7,56 ms
 Execution time = 4,404 sec; IOPS = 341; avg response = 6,73 ms
 Execution time = 8,534 sec; IOPS = 352; avg response = 7,54 ms
+
+Job = PING;percentiles 50th=0,486; 99th=1,330; 99.9th=4,607; 99.99th=16,333; 99.999th=64,051; 100th=64,051; totalTimeSec=0,974;Total requests sent = 80000;Execution time = 22,764 sec; IOPS = 3514; avg response = 0,01 ms;Threads = 2;Iterations per thread = 40000;Total # of GC: 13;Total GC Time (ms): 55;
+

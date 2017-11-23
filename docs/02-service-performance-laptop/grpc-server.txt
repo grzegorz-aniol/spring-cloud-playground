@@ -14,3 +14,7 @@ Execution time = 14,760 sec; IOPS = 2033; average latency = 1,14 ms
 Threads = 3;Iterations per thread = 5000;Total requests sent = 15000;Execution time = 11,303 sec; IOPS = 1327; avg response = 2,07 ms
 Threads = 3;Iterations per thread = 15000;Total requests sent = 45000;Execution time = 21,769 sec; IOPS = 2067; avg response = 1,38 ms
 
+Job = NEWCUSTOMER;percentiles 50th=10,633; 99th=33,288; 99.9th=55,401; 99.99th=75,497; 99.999th=882,930; 100th=882,931; totalTimeSec=239,833;
+Execution time = 121,126 sec; IOPS = 165; avg response = 11,99 ms;Threads = 2;Iterations per thread = 10000;Total requests sent = 20000;
+Total # of GC: 4;Total GC Time (ms): 31;
+

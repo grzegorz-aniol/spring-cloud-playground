@@ -17,6 +17,7 @@ public class OrdersGRpcClientApp {
         options.addOption("h", "host", true, "Server address");
         options.addOption("p", "port", true, "Port");
         options.addOption("j", "job", true, "Job name to do (ping, newcustomer)");
+        options.addOption("d", "data", true, "Export performance samples to the file");
         
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);

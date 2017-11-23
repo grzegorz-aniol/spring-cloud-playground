@@ -9,6 +9,7 @@ import java.time.temporal.TemporalUnit;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 
@@ -75,19 +76,32 @@ public class Histogram {
         totalTime += value;
         worstTime = Math.max(worstTime, value);
     }
+    
+    public Collection<Long> getData() {
+        return Collections.unmodifiableCollection(this.samples);
+    }
 
     public static Histogram.Statistics getStats(Histogram histogram, Percentile.EstimationType estimationType) {
         ArrayList<Histogram> data = new ArrayList<>(1);
         data.add(histogram);
         return getStats(data);
     }
+    
+    public static long convert(long value, TemporalUnit sourceUnit, TemporalUnit targetUnit) {
+        if (sourceUnit.equals(targetUnit)) {
+            return value; 
+        }
+        long v = value * sourceUnit.getDuration().toNanos(); // convert to ns
+        v /= targetUnit.getDuration().toNanos(); // convert to target unit
+        return v;
+    }
 
     public static Histogram.Statistics getStats(Histogram histogram) {
-        return getStats(histogram, Percentile.EstimationType.R_8);
+        return getStats(histogram, Percentile.EstimationType.R_7);
     }
     
     public static Histogram.Statistics getStats(Collection<Histogram> histograms) {
-        return getStats(histograms, Percentile.EstimationType.R_8);
+        return getStats(histograms, Percentile.EstimationType.R_7);
     }
 
     public static Histogram.Statistics getStats(Collection<Histogram> histograms, Percentile.EstimationType estimationType) {
@@ -100,8 +114,8 @@ public class Histogram {
         while (iterator.hasNext()) {
             Histogram h = iterator.next();
             totalSize += h.samples.size();
-            totalTime += Duration.of(h.totalTime, h.units).get(PRECISION_UNITS);
-            worstTime = Math.max(worstTime, Duration.of(h.worstTime, h.units).get(PRECISION_UNITS));
+            totalTime += convert(h.totalTime, h.units, PRECISION_UNITS);
+            worstTime = Math.max(worstTime, convert(h.worstTime, h.units, PRECISION_UNITS));
         }
         
         double allData[] = new double[totalSize];
@@ -111,7 +125,7 @@ public class Histogram {
         while (iterator.hasNext()) {
             Histogram h = iterator.next();
             for (long value : h.samples) {
-                allData[pos++] = Duration.of(value, h.units).get(PRECISION_UNITS);
+                allData[pos++] = value;
             }
         }
 
