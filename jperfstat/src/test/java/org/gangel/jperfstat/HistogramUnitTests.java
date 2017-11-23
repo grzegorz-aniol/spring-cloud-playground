@@ -1,4 +1,4 @@
-package org.gangel.orders.grpc.common;
+package org.gangel.jperfstat;
 
 import static org.junit.Assert.assertEquals;
 

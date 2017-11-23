@@ -6,9 +6,9 @@ import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
-import org.gangel.orders.grpc.Configuration;
+import org.gangel.jperfstat.Histogram;
 import org.gangel.orders.grpc.common.GlobalExceptionHandler;
-import org.gangel.orders.grpc.common.Histogram;
+import org.gangel.orders.job.Configuration;
 
 import java.io.File;
 import java.util.concurrent.Callable;

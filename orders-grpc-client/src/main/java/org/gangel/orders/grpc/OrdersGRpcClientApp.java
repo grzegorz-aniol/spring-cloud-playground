@@ -6,6 +6,9 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.gangel.orders.grpc.common.GlobalExceptionHandler;
+import org.gangel.orders.job.Configuration;
+import org.gangel.orders.job.JobManager;
+import org.gangel.orders.job.JobType;
 
 public class OrdersGRpcClientApp {
 
@@ -17,7 +20,6 @@ public class OrdersGRpcClientApp {
         options.addOption("h", "host", true, "Server address");
         options.addOption("p", "port", true, "Port");
         options.addOption("j", "job", true, "Job name to do (ping, newcustomer)");
-        options.addOption("d", "data", true, "Export performance samples to the file");
         
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -58,6 +60,12 @@ public class OrdersGRpcClientApp {
         }
     }
     
+    
+    public static JobManager getJobManagerForJobType(JobType type) {
+        return type.accept(new JobManagerJobVisitor());
+    }    
+
+    
     public static void main(String[] args) {
         GlobalExceptionHandler.register();
         
@@ -71,7 +79,7 @@ public class OrdersGRpcClientApp {
             return; 
         }
         
-        JobManager mgr = JobManager.getJobManagerForJobType(Configuration.jobType);
+        JobManager mgr = getJobManagerForJobType(Configuration.jobType);
         
         mgr.run();
         

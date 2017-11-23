@@ -1,16 +1,19 @@
 package org.gangel.orders.grpc;
 
 import lombok.NonNull;
-import org.gangel.orders.grpc.common.Histogram;
+import org.gangel.jperfstat.Histogram;
 import org.gangel.orders.grpc.executors.CustomerServiceExecutor;
 import org.gangel.orders.grpc.executors.OrdersServiceExecutor;
 import org.gangel.orders.grpc.executors.ProductServiceExecutor;
+import org.gangel.orders.job.Configuration;
+import org.gangel.orders.job.JobManager;
+import org.gangel.orders.job.JobType;
 
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 public class JobManagerJobVisitor implements JobType.Visitor<JobManager> {
-
+    
     @Override
     @NonNull
     public JobManager visitUnknown() {
