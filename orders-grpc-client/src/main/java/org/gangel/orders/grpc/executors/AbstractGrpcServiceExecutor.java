@@ -6,6 +6,7 @@ import com.google.protobuf.Message;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
+import lombok.SneakyThrows;
 import org.gangel.jperfstat.Histogram;
 import org.gangel.orders.grpc.common.GlobalExceptionHandler;
 import org.gangel.orders.job.Configuration;
@@ -32,6 +33,27 @@ public abstract class AbstractGrpcServiceExecutor<S> implements Callable<Histogr
     public Histogram getHistogram() {
         return this.histogram;
     }
+
+    @SneakyThrows
+    private long sendRequest(final S stub, boolean isWarmPhase) {
+        long t0 = System.nanoTime();
+        
+        ListenableFuture<? extends Message> future = requestFunction.apply(stub);
+        Message response;
+        try {
+            response = future.get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            throw new RuntimeException(e);
+        }                
+        
+        long time = (System.nanoTime() - t0);
+        if (response == null) {
+            throw new RuntimeException("Wrong response: null object");
+        }
+        
+        return time;
+            
+    }
     
     public Histogram call() throws Exception {
         
@@ -43,31 +65,19 @@ public abstract class AbstractGrpcServiceExecutor<S> implements Callable<Histogr
                         .forClient().trustManager(new File(Configuration.certFilePath)).build())
                 .build();
         final S stub = produceStub(channel);
-
-        for (long i = 0; i < Configuration.numOfIterations; ++i) {
-            try {
-                long t0 = System.nanoTime();
-                
-                ListenableFuture<? extends Message> future = requestFunction.apply(stub);
-                Message response;
-                try {
-                    response = future.get(5, TimeUnit.SECONDS);
-                } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    throw new RuntimeException(e);
-                }                
-                
-                long time = (System.nanoTime() - t0);
-                if (response == null) {
-                    throw new RuntimeException("Wrong response: null object");
-                }
-                histogram.put(time);
-                
-            } catch (Throwable e) {
-                System.err.println(e.getMessage());
-                e.printStackTrace();
-                return null;
+        
+        if (Configuration.numOfWarmIterations > 0) {
+            for (long i = 0; i < Configuration.numOfWarmIterations; ++i) {
+                sendRequest(stub, true);
             }
         }
+
+        histogram.setStartTime();
+        for (long i = 0; i < Configuration.numOfIterations; ++i) {
+            long time = sendRequest(stub, false);
+            histogram.put(time);
+        }
+        histogram.setStopTime();
 
         channel.shutdown();
         channel.awaitTermination(5, TimeUnit.SECONDS);

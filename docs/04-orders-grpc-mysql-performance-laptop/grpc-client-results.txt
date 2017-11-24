@@ -3,3 +3,4 @@ Job = GETCUSTOMER;Threads = 1;Iterations per thread = 10000;Total requests sent 
 
 Job = NEWPRODUCT;Threads = 1;Iterations per thread = 10000;Total requests sent = 10000;Execution time = 102,639 sec; IOPS = 97; avg response = 10,18 ms
 
+Job = PING;percentiles 50th=0,680; 99th=2,390; 99.9th=4,683; 99.99th=13,452; 99.999th=385,965; 100th=543,073; totalTimeSec=24,319;Execution time = 25,447 sec; IOPS = 1179; avg response = 0,81 ms;Threads = 1;Iterations per thread = 30000;Total requests sent = 30000;Total # of GC: 4;Total GC Time (ms): 32;

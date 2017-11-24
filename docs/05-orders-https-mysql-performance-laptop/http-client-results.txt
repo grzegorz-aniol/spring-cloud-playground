@@ -1,0 +1,3 @@
+Job = PING;percentiles 50th=0,771; 99th=1,713; 99.9th=2,566; 99.99th=6,497; 99.999th=45,671; 100th=62,229; totalTimeSec=25,867;Execution time = 27,185 sec; IOPS = 1104; avg response = 0,86 ms;Threads = 1;Iterations per thread = 30000;Total requests sent = 30000;Total # of GC: 4;Total GC Time (ms): 22;
+
+

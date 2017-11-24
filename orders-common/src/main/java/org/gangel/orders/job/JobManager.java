@@ -57,16 +57,15 @@ public class JobManager implements Runnable {
         }).collect(Collectors.toList());
         
         Histogram.Statistics stats = Histogram.getStats(histograms);
-        long totalDuraionTime = stats.totalTime.toMillis();
         long totalRequestsCount = (Configuration.numOfIterations * Configuration.numOfThreads);
         
-        System.out.print(String.format("Job = %s;", jobType.toString()));
+        System.out.print(String.format("Job=%s;", jobType.toString()));
         System.out.print(stats.toString());
-        System.out.print(String.format("Execution time = %.3f sec; IOPS = %.0f; avg response = %.2f ms;", 
-                1e-3*executionTime, totalRequestsCount/(1e-3*executionTime), (double)totalDuraionTime/totalRequestsCount));
-        System.out.print(String.format("Threads = %d;", Configuration.numOfThreads));
-        System.out.print(String.format("Iterations per thread = %d;", Configuration.numOfIterations));
-        System.out.print(String.format("Total requests sent = %d;", totalRequestsCount));
+        System.out.print(String.format("IOPS=%.0f;", totalRequestsCount/(1e-3 * stats.getExecutionTime().toMillis())));
+        System.out.print(String.format("Total job time[s]=%.3f;", 1e-3 * executionTime));
+        System.out.print(String.format("Threads=%d;", Configuration.numOfThreads));
+        System.out.print(String.format("Iterations per thread=%d;", Configuration.numOfIterations));
+        System.out.print(String.format("Total requests sent=%d;", totalRequestsCount));
         GCStats.printGCStats();
         System.out.println();
         System.out.println(String.format("Done."));

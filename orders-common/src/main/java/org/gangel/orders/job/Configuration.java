@@ -3,6 +3,7 @@ package org.gangel.orders.job;
 public class Configuration {
 
     public static int numOfIterations = 50_000;
+    public static int numOfWarmIterations = 0;    
     public static int numOfThreads = 1;
     public static String certFilePath;
     public static String host = "localhost";
@@ -18,5 +19,5 @@ public class Configuration {
     public static int maxProductId = 10_000;
     
     public static int minOrdersId = 1;
-    public static int maxOrdersId = 10_000;    
+    public static int maxOrdersId = 10_000;
 }

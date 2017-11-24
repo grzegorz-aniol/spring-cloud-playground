@@ -16,6 +16,7 @@ public class OrdersGRpcClientApp {
         Options options = new Options();
         options.addOption("cert",true, "Path to server certificate");
         options.addOption("i", "iterations", true, "Number of iterations");
+        options.addOption("wi", "warm-iterations", true, "Number of warming iterations");
         options.addOption("t", "threads", true, "Number of threads");
         options.addOption("h", "host", true, "Server address");
         options.addOption("p", "port", true, "Port");
@@ -33,7 +34,11 @@ public class OrdersGRpcClientApp {
         String iterationValue = cmd.getOptionValue("i");
         if (iterationValue != null) {
             Configuration.numOfIterations = Math.max(1, Integer.parseUnsignedInt(iterationValue));
-        }        
+        }      
+        iterationValue = cmd.getOptionValue("wi");
+        if (iterationValue != null) {
+            Configuration.numOfWarmIterations = Math.max(0, Integer.parseUnsignedInt(iterationValue));
+        }           
         
         Configuration.numOfThreads = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         String numOfThreadsTemp = cmd.getOptionValue("t");

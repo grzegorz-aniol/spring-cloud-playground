@@ -14,7 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.Serializable;
 
-public abstract class AbstractController<E extends AbstractEntity<ID>, T extends DTO<ID>, ID extends Serializable> {
+public abstract class AbstractController<E extends AbstractEntity<ID>, T, ID extends Serializable> {
 
     protected abstract AbstractService<E, T, ID> getService();
     
@@ -28,14 +28,14 @@ public abstract class AbstractController<E extends AbstractEntity<ID>, T extends
     @RequestMapping(method=RequestMethod.PUT, path="/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void update(@PathVariable("id") ID id, @RequestBody T dto) {
-        dto.setId(id);
+        getService().getMapper().setIdentifier(dto, id);
         getService().update(id, dto);
     }    
     
     @RequestMapping(method=RequestMethod.POST) 
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> addNew(@RequestBody T dto, UriComponentsBuilder ucBuilder) {
-        dto.setId(null);
+        getService().getMapper().setIdentifier(dto, null);
         ID id = getService().save(dto);
         
         HttpHeaders headers = new HttpHeaders();

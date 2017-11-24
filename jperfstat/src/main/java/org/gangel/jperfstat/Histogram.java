@@ -23,6 +23,10 @@ public class Histogram {
     private final static TemporalUnit PRECISION_UNITS = ChronoUnit.NANOS;
     
     private TemporalUnit units = PRECISION_UNITS;
+    
+    private long startTimestamp = 0L;
+    
+    private long stopTimestamp = 0L;
 
     public static class Statistics {
         public Duration p50th = Duration.ofNanos(0);
@@ -31,25 +35,35 @@ public class Histogram {
         public Duration p99d99th = Duration.ofNanos(0);
         public Duration p99d999th = Duration.ofNanos(0);
         public Duration p100th = Duration.ofNanos(0); // worst case
-        public Duration totalTime = Duration.ofNanos(0);
+        public Duration sumTime = Duration.ofNanos(0);
+        public Duration startTime = null;
+        public Duration stopTime = null;
         
         public Statistics() {
         }
         
         @Override
         public String toString() {
-            return String.format("percentiles 50th=%.3f; 99th=%.3f; 99.9th=%.3f; 99.99th=%.3f; 99.999th=%.3f; 100th=%.3f; totalTimeSec=%.3f;", 
+            return String.format("percentiles[ms] 50th=%.3f; 99th=%.3f; 99.9th=%.3f; 99.99th=%.3f; 99.999th=%.3f; 100th=%.3f; execution time[s]=%.3f;", 
                     convertToMils(p50th), 
                     convertToMils(p99th), 
                     convertToMils(p99d9th), 
                     convertToMils(p99d99th), 
                     convertToMils(p99d999th), 
                     convertToMils(p100th), 
-                    1e-3 * totalTime.toMillis());
+                    (startTime != null && stopTime != null ? 1e-3*(stopTime.toMillis() - startTime.toMillis()) : Double.NaN)
+            );
         }
         
         public double convertToMils(Duration duration) {
             return  (double) duration.toNanos() / (double)Duration.of(1, ChronoUnit.MILLIS).toNanos();        
+        }
+        
+        public Duration getExecutionTime() {
+            if (startTime == null || stopTime == null) {
+                throw new RuntimeException("Execution time can't be calculated. None start nor stop time has been marked!");
+            }
+            return stopTime.minus(stopTime);
         }
         
     }
@@ -70,6 +84,14 @@ public class Histogram {
     
     public Histogram(int nSamples) {
         this(nSamples, PRECISION_UNITS);
+    }
+    
+    public void setStartTime() {
+        startTimestamp = System.nanoTime();
+    }
+    
+    public void setStopTime() {
+        stopTimestamp = System.nanoTime();
     }
     
     public void put(long value) {
@@ -114,12 +136,17 @@ public class Histogram {
         int totalSize = 0;
         long totalTime = 0L;
         long worstTime = 0L;
+        long startTime = Long.MAX_VALUE;
+        long stopTime = 0;
+        
         Iterator<Histogram> iterator = histograms.iterator();
         while (iterator.hasNext()) {
             Histogram h = iterator.next();
             totalSize += h.samples.size();
             totalTime += convert(h.totalTime, h.units, PRECISION_UNITS);
             worstTime = Math.max(worstTime, convert(h.worstTime, h.units, PRECISION_UNITS));
+            startTime = Math.min(startTime, h.startTimestamp);
+            stopTime  = Math.max(stopTime, h.stopTimestamp);
         }
         
         double allData[] = new double[totalSize];
@@ -141,7 +168,9 @@ public class Histogram {
         s.p99d99th = Duration.of((long)p.evaluate(99.99), PRECISION_UNITS);
         s.p99d999th = Duration.of((long)p.evaluate(99.999), PRECISION_UNITS);
         s.p100th = Duration.of(worstTime, PRECISION_UNITS);
-        s.totalTime = Duration.of(totalTime, PRECISION_UNITS);
+        s.sumTime = Duration.of(totalTime, PRECISION_UNITS);
+        s.startTime = Duration.of(startTime, PRECISION_UNITS);
+        s.stopTime = Duration.of(stopTime, PRECISION_UNITS);
         return s; 
     }
 

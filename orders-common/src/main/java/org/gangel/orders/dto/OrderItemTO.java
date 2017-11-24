@@ -6,14 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.gangel.common.services.DTO;
 
 import java.io.Serializable;
 
 @Getter @Setter @Builder
 @NoArgsConstructor @AllArgsConstructor
 @JsonRootName("order_item")
-public class OrderItemTO implements Serializable, DTO<Long> {
+public class OrderItemTO implements Serializable {
 
     private static final long serialVersionUID = -5296568930869499662L;
     
