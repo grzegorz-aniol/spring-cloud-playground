@@ -63,7 +63,7 @@ public class Histogram {
             if (startTime == null || stopTime == null) {
                 throw new RuntimeException("Execution time can't be calculated. None start nor stop time has been marked!");
             }
-            return stopTime.minus(stopTime);
+            return stopTime.minus(startTime);
         }
         
     }

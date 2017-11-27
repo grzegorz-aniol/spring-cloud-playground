@@ -20,4 +20,7 @@ public class Configuration {
     
     public static int minOrdersId = 1;
     public static int maxOrdersId = 10_000;
+    
+    public static boolean isSSL = false; 
+    public static String sslCertFile;
 }

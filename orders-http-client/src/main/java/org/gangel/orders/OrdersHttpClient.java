@@ -22,11 +22,15 @@ public class OrdersHttpClient {
             return; 
         }        
         
+        if (Configuration.isSSL) {
+            System.out.println("SSL is enabled");
+            System.setProperty("javax.net.ssl.trustStore", Configuration.sslCertFile);
+        }
+        
         JobManager job = Configuration.jobType.accept(new JobTypeVisitor());
         job.run();
         
         System.out.println("\nDone.");
-
     }
 
     private static void setOptions(String[] args) throws ParseException {
@@ -37,6 +41,8 @@ public class OrdersHttpClient {
         options.addOption("h", "host", true, "Server address");
         options.addOption("p", "port", true, "Port");
         options.addOption("j", "job", true, "Job name to do (ping, newcustomer)");
+        options.addOption("", "ssl", false, "Enable SSL connection");
+        options.addOption("", "cert", true, "SSL certificate file");
         
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -70,5 +76,16 @@ public class OrdersHttpClient {
         if (jobNameValue != null) {
             Configuration.jobType = JobType.valueOf(jobNameValue);
         }        
+        
+        Configuration.isSSL = cmd.hasOption("ssl");
+        
+        String sslPath = cmd.getOptionValue("cert");
+        if (sslPath!=null && !sslPath.isEmpty()) {
+            Configuration.sslCertFile = sslPath; 
+        }
+        
+        if (Configuration.isSSL && Configuration.sslCertFile==null) {
+            throw new RuntimeException("SSL certification path is not specified!");
+        }
     }
 }

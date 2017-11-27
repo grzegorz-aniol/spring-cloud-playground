@@ -35,15 +35,24 @@ public abstract class AbstractTaskExecutor implements Callable<Histogram> {
     public void responseConsumer(CloseableHttpResponse response) {        
     }
     
+    protected String getProtocol() {
+        return Configuration.isSSL ? "https://" : "http://";
+    }
+    
     protected HttpUriRequest requestGetBuilder(String path) {
-        HttpGet getRequest = new HttpGet("http://" + Configuration.host + ":" + Configuration.port + path);
+        HttpGet getRequest = new HttpGet(getProtocol() + Configuration.host + ":" + Configuration.port + path);
         getRequest.addHeader("Accept", "application/json");
         return getRequest;
     }
 
     @SneakyThrows
     protected HttpUriRequest requestPostBuilder(String path, String body) {
-        HttpPost postRequest = new HttpPost("http://" + Configuration.host + ":" + Configuration.port + path);
+        HttpPost postRequest = new HttpPost(
+                    getProtocol() 
+                    + Configuration.host 
+                    + ":" 
+                    + Configuration.port 
+                    + path);
         postRequest.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
         return postRequest;
     }
@@ -72,7 +81,7 @@ public abstract class AbstractTaskExecutor implements Callable<Histogram> {
     
     @Override
     public Histogram call() throws Exception {
-
+        
         histogram = new Histogram(Configuration.numOfIterations, ChronoUnit.NANOS);
         
         PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
