@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import 'orders.proto';
+import "google/protobuf/empty.proto";
 
 package orders;
 
@@ -8,15 +9,29 @@ option java_multiple_files = true;
 option java_package = "org.gangel.orders.proto";
 option java_outer_classname = "OrdersProto";
 
+message SetOfIds {
+	repeated int64 ids = 1;	
+}
+
 service CustomerService {
+	// unary calls
 	rpc CreateNewCustomer(NewCustomerRequest) returns (NewCustomerResponse) {}
 	rpc GetCustomer(GetCustomerRequest) returns (GetCustomerResponse) {}
+	rpc GetCustomerIds(google.protobuf.Empty) returns (SetOfIds) {} 
+	
+	// server stream
+	rpc GetCustomerOrders(GetCustomerOrdersRequest) returns (stream GetCustomerOrdersResponse) {}
+	
+	// client stream
+	rpc UpdateCustomers(stream NewCustomerRequest) returns (google.protobuf.Empty) {}
+	
+	// bidirectional streaming
+	rpc CreateNewCustomers(stream NewCustomerRequest) returns (stream NewCustomerResponse) {}
 }
 
 service ProductService {
 	rpc CreateNewProduct(NewProductRequest) returns (NewProductResponse) {}
-	rpc GetProduct(GetProductRequest) returns (GetProductResponse) {}
-	
+	rpc GetProduct(GetProductRequest) returns (GetProductResponse) {}	
 }
 
 service OrdersService {
@@ -24,6 +39,7 @@ service OrdersService {
 	rpc GetOrder(GetOrderRequest) returns (GetOrderResponse) {}
 
 	rpc Ping(PingRequest) returns (PingResponse) {}
+	rpc Pings(stream PingRequest) returns (stream PingResponse) {}
 }
 
 // --------------------------
@@ -48,6 +64,14 @@ message GetCustomerRequest {
 
 message GetCustomerResponse {
 	Customer customer = 1;
+}
+
+message GetCustomerOrdersRequest {
+	int64 customerId = 1;
+}
+
+message GetCustomerOrdersResponse {
+	Orders orders = 1;
 }
 
 // --------------------------

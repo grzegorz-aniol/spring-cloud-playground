@@ -57,4 +57,16 @@ public class JobTypeVisitor implements JobType.Visitor<JobManager> {
         return null;
     }
 
+    @Override
+    public JobManager visitStreamOfNewCustomers() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public JobManager visitStreamOfPings() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

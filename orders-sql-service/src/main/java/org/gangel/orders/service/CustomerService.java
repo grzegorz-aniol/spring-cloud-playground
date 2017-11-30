@@ -5,10 +5,12 @@ import org.gangel.common.services.AbstractService;
 import org.gangel.orders.dto.CustomerTO;
 import org.gangel.orders.entity.Customer;
 import org.gangel.orders.repository.CustomerRepository;
+import org.gangel.orders.repository.IdsRange;
 import org.gangel.orders.service.mappers.CustomerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomerService extends AbstractService<Customer, CustomerTO, Long> {
@@ -29,4 +31,8 @@ public class CustomerService extends AbstractService<Customer, CustomerTO, Long>
         return mapper;
     }
 
+    @Transactional(readOnly=true) 
+    public IdsRange getIdsRange() {
+        return repo.getIdsRange();
+    }
 }

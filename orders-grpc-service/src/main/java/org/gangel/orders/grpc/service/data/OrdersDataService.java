@@ -7,6 +7,9 @@ import org.gangel.orders.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Stream;
 
 @Component
 public class OrdersDataService 
@@ -27,5 +30,10 @@ public class OrdersDataService
     protected AbstractGrpcMapper<org.gangel.orders.entity.Orders, Orders, Orders.Builder, Long> getMapper() {
         return mapper;
     }
-
+    
+    @Transactional(readOnly=true) 
+    public Stream<Orders> getCustomerOrders(long customerId) {
+       return repository.findByCustomerId(customerId).map(e -> mapper.toProto(e).build());
+    }
+     
 }

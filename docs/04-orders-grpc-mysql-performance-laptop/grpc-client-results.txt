@@ -5,5 +5,9 @@ Job = NEWPRODUCT;Threads = 1;Iterations per thread = 10000;Total requests sent =
 
 Job = PING;percentiles 50th=0,680; 99th=2,390; 99.9th=4,683; 99.99th=13,452; 99.999th=385,965; 100th=543,073; totalTimeSec=24,319;Execution time = 25,447 sec; IOPS = 1179; avg response = 0,81 ms;Threads = 1;Iterations per thread = 30000;Total requests sent = 30000;Total # of GC: 4;Total GC Time (ms): 32;
 
+Job=PINGS_STREAM;percentiles[ms] 50th=0,550; 99th=2,064; 99.9th=5,547; 99.99th=8,012; 99.999th=9,884; 100th=10,092; execution time[s]=6,865;IOPS=1457;Total job time[s]=9,405;Threads=1;Iterations per thread=10000;Total requests sent=10000;Total # of GC: 2;Total GC Time (ms): 15;
+
+Job=PINGS_STREAM;percentiles[ms] 50th=0,559; 99th=1,294; 99.9th=2,237; 99.99th=6,032; 99.999th=78,366; 100th=144,648; execution time[s]=30,929;IOPS=1617;Total job time[s]=32,584;Threads=1;Iterations per thread=50000;Total requests sent=50000;Total # of GC: 4;Total GC Time (ms): 30;
+
 Job=NEWCUSTOMER;percentiles[ms] 50th=9,453; 99th=17,324; 99.9th=30,342; 99.99th=57,233; 99.999th=77,428; 100th=78,809; execution time[s]=296,618;IOPS=101;Total job time[s]=298,236;Threads=1;Iterations per thread=30000;Total requests sent=30000;Total # of GC: 6;Total GC Time (ms): 47;
 

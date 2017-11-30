@@ -58,6 +58,24 @@ public enum JobType  {
         public <T> T accept(Visitor<T> visitor) {
             return visitor.visitGetOrders();
         }
+    },
+    
+    PINGS_STREAM("Stream of pings") {
+
+        @Override
+        public <T> T accept(Visitor<T> visitor) {
+            return visitor.visitStreamOfPings();
+        }
+        
+    },
+    
+    NEWCUSTOMERS_STREAM("Stream of new customers") {
+
+        @Override
+        public <T> T accept(Visitor<T> visitor) {
+            return visitor.visitStreamOfNewCustomers();
+        }
+        
     }
     ;
     
@@ -78,6 +96,8 @@ public enum JobType  {
         T visitGetProduct();
         T visitNewOrders();
         T visitGetOrders();
+        T visitStreamOfPings();
+        T visitStreamOfNewCustomers();
         T visitUnknown();
     }
     

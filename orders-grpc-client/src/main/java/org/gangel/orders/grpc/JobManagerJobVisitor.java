@@ -2,9 +2,10 @@ package org.gangel.orders.grpc;
 
 import lombok.NonNull;
 import org.gangel.jperfstat.Histogram;
+import org.gangel.orders.grpc.executors.CustomerRequestExecutor;
 import org.gangel.orders.grpc.executors.CustomerServiceExecutor;
+import org.gangel.orders.grpc.executors.OrdersRequestExecutor;
 import org.gangel.orders.grpc.executors.OrdersServiceExecutor;
-import org.gangel.orders.grpc.executors.ProductServiceExecutor;
 import org.gangel.orders.job.Configuration;
 import org.gangel.orders.job.JobManager;
 import org.gangel.orders.job.JobType;
@@ -89,6 +90,30 @@ public class JobManagerJobVisitor implements JobType.Visitor<JobManager> {
             public Callable<Histogram> get() {
                 return OrdersServiceExecutor.getGetOrdersRequestExecutor();
             }
+        });
+    }
+
+    @Override
+    public JobManager visitStreamOfNewCustomers() {
+        return new JobManager(Configuration.jobType, new Supplier<Callable<Histogram>>() {
+
+            @Override
+            public Callable<Histogram> get() {
+                return CustomerRequestExecutor.newCustomers();
+            }
+            
+        });
+    }
+
+    @Override
+    public JobManager visitStreamOfPings() {
+        return new JobManager(Configuration.jobType, new Supplier<Callable<Histogram>>() {
+
+            @Override
+            public Callable<Histogram> get() {
+                return OrdersRequestExecutor.newPingsExecutor();
+            }
+            
         });
     }
 

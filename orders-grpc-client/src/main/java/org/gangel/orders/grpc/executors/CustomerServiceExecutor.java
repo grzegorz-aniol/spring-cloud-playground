@@ -38,6 +38,12 @@ public class CustomerServiceExecutor extends AbstractGrpcServiceExecutor<Custome
                     .build());
         });
     }
+    
+    public static CustomerServiceExecutor getStreamOfNewCustomersRequestExecutor() {
+        return new CustomerServiceExecutor((stub) -> {
+            return null;
+        });
+    }
 
     public static Callable<Histogram> getGetCustomerRequestExecutor() {
         return new CustomerServiceExecutor((stub) -> {

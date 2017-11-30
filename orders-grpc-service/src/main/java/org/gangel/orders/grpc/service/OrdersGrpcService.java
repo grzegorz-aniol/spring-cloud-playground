@@ -47,4 +47,24 @@ public class OrdersGrpcService extends OrdersServiceImplBase  {
         responseObserver.onCompleted();
     }
 
+    @Override
+    public StreamObserver<PingRequest> pings(StreamObserver<PingResponse> responseObserver) {
+        return new StreamObserver<PingRequest>() {
+            @Override
+            public void onNext(PingRequest value) {
+                responseObserver.onNext(PingResponse.newBuilder().setResponse(Integer.toString(instancePort)).build());
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                responseObserver.onError(t);
+            }
+
+            @Override
+            public void onCompleted() {
+                responseObserver.onCompleted();
+            }
+        };
+    }
+
 }
