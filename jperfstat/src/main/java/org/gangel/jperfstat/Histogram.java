@@ -29,6 +29,7 @@ public class Histogram {
     private long stopTimestamp = 0L;
 
     public static class Statistics {
+        public Duration p0th = Duration.ofNanos(0); // best case
         public Duration p50th = Duration.ofNanos(0);
         public Duration p99th = Duration.ofNanos(0);
         public Duration p99d9th = Duration.ofNanos(0);
@@ -44,7 +45,8 @@ public class Histogram {
         
         @Override
         public String toString() {
-            return String.format("percentiles[ms] 50th=%.3f; 99th=%.3f; 99.9th=%.3f; 99.99th=%.3f; 99.999th=%.3f; 100th=%.3f; execution time[s]=%.3f;", 
+            return String.format("percentiles[ms] 0th=%.3f; 50th=%.3f; 99th=%.3f; 99.9th=%.3f; 99.99th=%.3f; 99.999th=%.3f; 100th=%.3f; execution time[s]=%.3f;", 
+                    convertToMils(p0th), 
                     convertToMils(p50th), 
                     convertToMils(p99th), 
                     convertToMils(p99d9th), 
@@ -55,7 +57,7 @@ public class Histogram {
             );
         }
         
-        public double convertToMils(Duration duration) {
+        public static double convertToMils(Duration duration) {
             return  (double) duration.toNanos() / (double)Duration.of(1, ChronoUnit.MILLIS).toNanos();        
         }
         
@@ -74,6 +76,7 @@ public class Histogram {
     
     public long totalTime = 0;
     
+    public long bestTime = Long.MAX_VALUE;
     public long worstTime = 0;
     
     public Histogram(int nSamples, TemporalUnit units) {
@@ -101,6 +104,7 @@ public class Histogram {
         }
         totalTime += value;
         worstTime = Math.max(worstTime, value);
+        bestTime = Math.min(bestTime, value);
     }
     
     public Collection<Long> getData() {
@@ -136,6 +140,7 @@ public class Histogram {
         int totalSize = 0;
         long totalTime = 0L;
         long worstTime = 0L;
+        long bestTime = Long.MAX_VALUE;
         long startTime = Long.MAX_VALUE;
         long stopTime = 0;
         
@@ -145,6 +150,7 @@ public class Histogram {
             totalSize += h.samples.size();
             totalTime += convert(h.totalTime, h.units, PRECISION_UNITS);
             worstTime = Math.max(worstTime, convert(h.worstTime, h.units, PRECISION_UNITS));
+            bestTime = Math.min(bestTime, convert(h.bestTime, h.units, PRECISION_UNITS));
             startTime = Math.min(startTime, h.startTimestamp);
             stopTime  = Math.max(stopTime, h.stopTimestamp);
         }
@@ -162,6 +168,7 @@ public class Histogram {
 
         Percentile p = new Percentile().withEstimationType(estimationType);
         p.setData(allData);
+        s.p0th = Duration.of(bestTime, PRECISION_UNITS);
         s.p50th = Duration.of((long)p.evaluate(50), PRECISION_UNITS);
         s.p99th = Duration.of((long)p.evaluate(99), PRECISION_UNITS);
         s.p99d9th = Duration.of((long)p.evaluate(99.9), PRECISION_UNITS);

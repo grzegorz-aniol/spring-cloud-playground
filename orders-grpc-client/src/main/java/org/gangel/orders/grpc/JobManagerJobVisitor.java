@@ -6,6 +6,7 @@ import org.gangel.orders.grpc.executors.CustomerRequestExecutor;
 import org.gangel.orders.grpc.executors.CustomerServiceExecutor;
 import org.gangel.orders.grpc.executors.OrdersRequestExecutor;
 import org.gangel.orders.grpc.executors.OrdersServiceExecutor;
+import org.gangel.orders.grpc.executors.ProductServiceExecutor;
 import org.gangel.orders.job.Configuration;
 import org.gangel.orders.job.JobManager;
 import org.gangel.orders.job.JobType;

@@ -23,4 +23,6 @@ public class Configuration {
     
     public static boolean isSSL = false; 
     public static String sslCertFile;
+    
+    public static boolean isCSVFormat = true;
 }

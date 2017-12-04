@@ -1,7 +1,9 @@
 package org.gangel.orders.job;
 
-import org.gangel.jperfstat.GCStats;
 import org.gangel.jperfstat.Histogram;
+import org.gangel.jperfstat.HistogramStatsFormatter;
+import org.gangel.jperfstat.ResultsTable;
+import org.gangel.jperfstat.ResultsTable.RowBuilder;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -59,16 +61,16 @@ public class JobManager implements Runnable {
         Histogram.Statistics stats = Histogram.getStats(histograms);
         long totalRequestsCount = (Configuration.numOfIterations * Configuration.numOfThreads);
         
-        System.out.print(String.format("Job=%s;", jobType.toString()));
-        System.out.print(stats.toString());
-        System.out.print(String.format("IOPS=%.0f;", totalRequestsCount/(1e-3 * stats.getExecutionTime().toMillis())));
-        System.out.print(String.format("Total job time[s]=%.3f;", 1e-3 * executionTime));
-        System.out.print(String.format("Threads=%d;", Configuration.numOfThreads));
-        System.out.print(String.format("Iterations per thread=%d;", Configuration.numOfIterations));
-        System.out.print(String.format("Total requests sent=%d;", totalRequestsCount));
-        GCStats.printGCStats();
-        System.out.println();
-        System.out.println(String.format("Done."));
+        ResultsTable resultsTable = HistogramStatsFormatter.createStatsResultTable();
+        RowBuilder rowBuilder = HistogramStatsFormatter.addStatsRow(resultsTable, jobType.toString(), stats);
+        rowBuilder.set("IOPS", totalRequestsCount / (1e-3 * stats.getExecutionTime().toMillis()));
+        rowBuilder.set("Total Job Time[s]", 1e-3 * executionTime);
+        rowBuilder.set("Threads", Configuration.numOfThreads);
+        rowBuilder.set("Iterations/sec", Configuration.numOfIterations);
+        rowBuilder.set("Total requests", totalRequestsCount);
+        rowBuilder.build();
+        
+        resultsTable.outputAsCsv();
     }
 
 }
