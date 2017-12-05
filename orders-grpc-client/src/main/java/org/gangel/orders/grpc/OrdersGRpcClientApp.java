@@ -63,6 +63,8 @@ public class OrdersGRpcClientApp {
         if (jobNameValue != null) {
             Configuration.jobType = JobType.valueOf(jobNameValue);
         }
+        
+        Configuration.appName = "Orders-gRPC-Client";
     }
     
     

@@ -1,5 +1,6 @@
 # execution scripts
 *.cmd
+test-env.sh
 
 # Compiled class file
 *.class
@@ -36,5 +37,10 @@ hs_err_pid*
 .
 
 # sensitive files
+*.cert
+*.jks
+*.pkcs12
 *.pem
 *.pem.pub
+*.priv
+*.pub

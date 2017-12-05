@@ -1,0 +1,11 @@
+#!/bin/sh
+export TEST_SERVER_HOST=server.domain.com
+export TEST_CLIENT_HOST=client.domain.com
+
+export TEST_KEY_FILE=$TEST_SERVER_HOST-key.pem
+export TEST_CERT_FILE=$TEST_SERVER_HOST-cert.pem
+export TEST_KEYSTORE_NAME=$TEST_SERVER_HOST-keystore
+
+export TEST_JKS_PASS=
+
+

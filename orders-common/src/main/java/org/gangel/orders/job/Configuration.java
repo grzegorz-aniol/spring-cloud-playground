@@ -1,7 +1,7 @@
 package org.gangel.orders.job;
 
 public class Configuration {
-
+    public static String appName = "";
     public static int numOfIterations = 50_000;
     public static int numOfWarmIterations = 0;    
     public static int numOfThreads = 1;

@@ -46,4 +46,44 @@
 		<logback.version>1.2.3</logback.version>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>copy-resource-one</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+
+						<configuration>
+							<outputDirectory>../bin</outputDirectory>
+							<overwrite>true</overwrite>
+							<resources>
+								<resource>
+									<directory>.</directory>
+									<includes>
+										<include>alpn-boot.jar</include>
+									</includes>
+								</resource>							
+								<resource>
+									<directory>./target</directory>
+									<includes>
+										<include>*.jar</include>
+									</includes>
+									<excludes>
+										<include>*-shaded.jar</include>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+			   </executions>
+			</plugin>
+		</plugins>
+	</build>
+	
 </project>

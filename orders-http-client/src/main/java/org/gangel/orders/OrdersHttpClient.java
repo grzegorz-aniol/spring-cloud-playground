@@ -87,5 +87,7 @@ public class OrdersHttpClient {
         if (Configuration.isSSL && Configuration.sslCertFile==null) {
             throw new RuntimeException("SSL certification path is not specified!");
         }
+        
+        Configuration.appName = (Configuration.isSSL ? "Orders-HTTPS-Client" : "Orders-HTTP-Client");
     }
 }

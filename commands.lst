@@ -1,5 +1,6 @@
 openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN=host.domain.com'
 
-orders-http-client-start PING -t 1 -i 50000 -wi 100 -h host.domain.com -p 8010 -ssl --cert "path/keystore.jks" 
+orders-http-client-start PING -t 1 -i 50000 -wi 100 -h host.domain.com -p 8010 --ssl --cert "path/keystore.jks" 
 orders-http-client-start PING -t 1 -i 50000 -wi 100 -h host.domain.com -p 8010 
-orders-grpc-client-start PING -t 1 -i 50000 -wi 10 -h localhost  
+orders-grpc-client-start PING -t 1 -i 50000 -wi 10 -h host.domain.com  
+

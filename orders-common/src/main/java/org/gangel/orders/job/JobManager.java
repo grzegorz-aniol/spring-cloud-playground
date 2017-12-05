@@ -47,7 +47,11 @@ public class JobManager implements Runnable {
         }
         
         executor.shutdown();
-        long executionTime = System.currentTimeMillis() - t0;        
+        try {
+            executor.awaitTermination(1, TimeUnit.DAYS);
+        } catch (InterruptedException e1) {
+            throw new RuntimeException(e1);
+        }
         
         List<Histogram> histograms;
         histograms = futures.stream().map(v -> {
@@ -58,11 +62,15 @@ public class JobManager implements Runnable {
             }
         }).collect(Collectors.toList());
         
+        long executionTime = System.currentTimeMillis() - t0;
+        
         Histogram.Statistics stats = Histogram.getStats(histograms);
         long totalRequestsCount = (Configuration.numOfIterations * Configuration.numOfThreads);
         
-        ResultsTable resultsTable = HistogramStatsFormatter.createStatsResultTable();
-        RowBuilder rowBuilder = HistogramStatsFormatter.addStatsRow(resultsTable, jobType.toString(), stats);
+        ResultsTable resultsTable = new ResultsTable();
+        RowBuilder rowBuilder = resultsTable.withRow(Configuration.appName);
+        rowBuilder.set("Job", jobType.toString()); 
+        HistogramStatsFormatter.addStatsRow(rowBuilder, stats);
         rowBuilder.set("IOPS", totalRequestsCount / (1e-3 * stats.getExecutionTime().toMillis()));
         rowBuilder.set("Total Job Time[s]", 1e-3 * executionTime);
         rowBuilder.set("Threads", Configuration.numOfThreads);

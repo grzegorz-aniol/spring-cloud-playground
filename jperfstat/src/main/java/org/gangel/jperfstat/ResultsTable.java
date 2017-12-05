@@ -1,19 +1,23 @@
 package org.gangel.jperfstat;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class ResultsTable {
 
     public static class RowBuilder {
-        private Iterator<String> columnsIterator;
+        private List<String> headers;
+        private int headerPos = 0;
         private Row row;
         private int precision = 3; 
         
-        private RowBuilder(Row row, Iterator<String> columnsIterator) {
+        private RowBuilder(Row row, List<String> headers) {
             this.row = row;
-            this.columnsIterator = columnsIterator;
+            this.headers = headers; 
         }
         
         public RowBuilder withPrecision(int precision) {
@@ -26,19 +30,19 @@ public class ResultsTable {
         }
         
         public RowBuilder add(String value) {
-            String column = value; 
-            if (columnsIterator != null) {
-                if (!columnsIterator.hasNext()) {
-                    throw new RuntimeException(String.format("Can't add value '%s'. Missing column at this position.", value));
-                }
-                column = columnsIterator.next();                
+            String header = headers.get(headerPos++);
+            if (header == null) {
+                throw new RuntimeException(String.format("Can't add value '%s'. Missing column at this position.", value));
             }
-            row.values.put(column, value);
+            row.values.put(header, value);
             return this; 
         }
         
         public RowBuilder set(String key, String value) {
-            row.parentRef.header.values.computeIfAbsent(key, (k)->k);
+            if (headers.indexOf(key) < 0) {
+                headers.add(key);
+                ++headerPos;
+            }
             row.values.put(key, value);
             return this; 
         }
@@ -54,20 +58,20 @@ public class ResultsTable {
     }
     
     public static class Row {
-        private Row header; 
+        private List<String> headers; 
         private String name; 
-        private LinkedHashMap<String, String> values = new LinkedHashMap<>(); 
+        private HashMap<String, String> values = new HashMap<>(); 
         private ResultsTable parentRef; 
         
-        private Row(final ResultsTable parentRef, final Row header, final String rowName) {
+        private Row(final ResultsTable parentRef, final List<String> headers, final String rowName) {
             this.parentRef = parentRef;
             this.name = rowName;
-            this.header = header;
+            this.headers = headers;
         }
 
-        private RowBuilder add(String value) {
-            RowBuilder rb = new RowBuilder(this, header != null ? header.values.keySet().iterator() : null);
-            rb.add(value);
+        private RowBuilder set(String column, String value) {
+            RowBuilder rb = new RowBuilder(this, headers);
+            rb.set(column, value);
             return rb; 
         }
 
@@ -97,7 +101,7 @@ public class ResultsTable {
         }
     };
     
-    private Row header = new Row(this, null, "");
+    private ArrayList<String> headers = new ArrayList<>();
     private LinkedHashMap<String, Row> rows = new LinkedHashMap<>();
 
     public ResultsTable() {
@@ -105,7 +109,7 @@ public class ResultsTable {
 
     public ResultsTable addHeaders(final String... names) {
         for (String s : names) {
-            header.values.put(s, s);
+            headers.add(s);
         }
         return this;
     }
@@ -113,27 +117,18 @@ public class ResultsTable {
     public static ResultsTable withHeaders(final String... names) {
         ResultsTable result = new ResultsTable();
         for (String s : names) {
-            result.header.values.put(s, s);
+            result.headers.add(s);
         }
         return result;
     }
 
     public RowBuilder withRow(final String rowName) {
-        Row row = rows.compute(rowName, (k,v) -> v == null ? new Row(this, header, rowName) : v );
-        return row.add(rowName);
-    }
-    
-    private void outputCsvRow(StringBuffer sb, Row row) {
-        Iterator<Entry<String, String>> iterator = row.values.entrySet().iterator();
-        while(iterator.hasNext()) {
-            Entry<String, String> entry = iterator.next();
-            sb.append(entry.getValue()).append(";");
-        }
-        sb.append("\n");
-    }
-    
+        Row row = rows.compute(rowName, (k,v) -> v == null ? new Row(this, headers, rowName) : v );
+        return row.set("Name", rowName);
+    }   
+
     private void outputCsvDataRow(StringBuffer sb, Row row) {
-        for(String header : header.values.values()) {
+        for(String header : headers) {
             String value = row.values.get(header);
             sb.append(value==null ? "" : value).append(";");
         }
@@ -142,7 +137,10 @@ public class ResultsTable {
     
     public void outputAsCsv() {
         StringBuffer sb = new StringBuffer();
-        outputCsvRow(sb, header); 
+        for(String header : headers) {
+            sb.append(header==null ? "" : header).append(";");
+        }
+        sb.append("\n");
         for (Row r : rows.values()) {
             outputCsvDataRow(sb, r);
         }
