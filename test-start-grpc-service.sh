@@ -1,5 +1,5 @@
 #!/bin/sh
-echo host=$TEST_SERVER_HOST
+echo Host: $TEST_SERVER_HOST
 set SPRING_DATASOURCE_URL=jdbc:mysql://EPPLKATW0022.budapest.epam.com:3306/orders?serverTimezone=UTC
 
 #nohup 
