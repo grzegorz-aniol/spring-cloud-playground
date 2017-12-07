@@ -1,4 +1,7 @@
 #!/bin/sh
+echo OS: $OS
+echo Current host: $HOSTNAME
+
 export TEST_SERVER_HOST=server.domain.com
 export TEST_CLIENT_HOST=client.domain.com
 
