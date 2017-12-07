@@ -1,9 +1,5 @@
-# local H2 databases
-ordersdb.mv.db
-
 # execution scripts
 *.cmd
-test-env.sh
 
 # Compiled class file
 *.class

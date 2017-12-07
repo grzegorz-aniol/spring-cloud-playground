@@ -15,17 +15,8 @@
 		<module>discovery-server</module>
 		<module>gateway-service</module>
 		<module>hystrix</module>
-		<module>abstract-service</module>
 		<module>simple-service</module>
 		<module>simple-client</module>
-    	<module>orders-sql-service</module>
-		<module>orders-http-service</module>
-		<module>orders-grpc-common</module>
-		<module>orders-grpc-service</module>
-		<module>orders-grpc-client</module>
-    <module>orders-http-client</module>
-    <module>jperfstat</module>
-    <module>orders-common</module>
   </modules>
 	
 	<parent>

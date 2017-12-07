@@ -1,6 +1,0 @@
-
-// Binary messages (HTTP 2.0)
-Threads = 3;Iterations per thread = 100;Total requests sent = 300;Execution time = 8,327 sec; IOPS = 36; avg response = 72,28 ms
-Threads = 1;Iterations per thread = 100;Total requests sent = 100;Execution time = 8,143 sec; IOPS = 12; avg response = 71,97 ms
-Threads = 2;Iterations per thread = 1000;Total requests sent = 2000;Execution time = 76,251 sec; IOPS = 26; avg response = 74,45 ms
-

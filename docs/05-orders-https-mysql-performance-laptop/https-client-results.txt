@@ -1,7 +1,0 @@
-
-Job=PING;percentiles[ms] 50th=1,075; 99th=2,276; 99.9th=3,161; 99.99th=8,358; 99.999th=172,425; 100th=205,401; execution time[s]=35,442;IOPS=846;Total job time[s]=36,341;Threads=1;Iterations per thread=30000;Total requests sent=30000;Total # of GC: 6;Total GC Time (ms): 40;
-
-Job=PING;percentiles[ms] 50th=1,041; 99th=1,756; 99.9th=2,908; 99.99th=7,643; 99.999th=10,540; 100th=11,636; execution time[s]=53,983;IOPS=926;Total job time[s]=55,301;Threads=1;Iterations per thread=50000;Total requests sent=50000;Total # of GC: 10;Total GC Time (ms): 53;
-
-Job=NEWCUSTOMER;percentiles[ms] 50th=8,916; 99th=17,009; 99.9th=32,760; 99.99th=50,883; 99.999th=55,804; 100th=55,941; execution time[s]=182,511;IOPS=110;Total job time[s]=185,083;Threads=1;Iterations per thread=20000;Total requests sent=20000;Total # of GC: 5;Total GC Time (ms): 33;
-
